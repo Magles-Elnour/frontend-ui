@@ -1,0 +1,80 @@
+:root {
+  --sys-primary: rgb(18, 85, 57);
+  --sys-surface-tint: rgb(18, 85, 57);
+  --sys-on-primary: rgb(255 255 255);
+  --sys-primary-container: rgb(171 242 201);
+  --sys-on-primary-container: rgb(0 33 19);
+  --sys-secondary: rgb(138 80 34);
+  --sys-on-secondary: rgb(255 255 255);
+  --sys-secondary-container: rgb(255 220 198);
+  --sys-on-secondary-container: rgb(48 20 0);
+  --sys-tertiary: rgb(97 97 24);
+  --sys-on-tertiary: rgb(255 255 255);
+  --sys-tertiary-container: rgb(232 231 143);
+  --sys-on-tertiary-container: rgb(29 29 0);
+  --sys-error: rgb(186 26 26);
+  --sys-on-error: rgb(255 255 255);
+  --sys-error-container: rgb(255 218 214);
+  --sys-on-error-container: rgb(65 0 2);
+  --sys-background: rgb(255, 255, 255);
+  --sys-on-background: rgb(23 29 25);
+  --sys-surface: rgb(245 251 244);
+  --sys-on-surface: rgb(108, 108, 137);
+  --sys-surface-variant: rgb(220 229 220);
+  --sys-on-surface-variant: rgb(64 73 67);
+  --sys-outline: rgb(209, 209, 219);
+  --sys-outline-variant: rgb(192 201 193);
+  --sys-shadow: rgb(0 0 0);
+  --sys-scrim: rgb(0 0 0);
+  --sys-inverse-surface: rgb(44 50 46);
+  --sys-inverse-on-surface: rgb(237 242 236);
+  --sys-inverse-primary: rgb(144 213 174);
+  --sys-primary-fixed: rgb(171 242 201);
+  --sys-on-primary-fixed: rgb(0 33 19);
+  --sys-primary-fixed-dim: rgb(144 213 174);
+  --sys-on-primary-fixed-variant: rgb(0 82 52);
+  --sys-secondary-fixed: rgb(255 220 198);
+  --sys-on-secondary-fixed: rgb(48 20 0);
+  --sys-secondary-fixed-dim: rgb(255 183 132);
+  --sys-on-secondary-fixed-variant: rgb(109 57 12);
+  --sys-tertiary-fixed: rgb(232 231 143);
+  --sys-on-tertiary-fixed: rgb(29 29 0);
+  --sys-tertiary-fixed-dim: rgb(203 203 118);
+  --sys-on-tertiary-fixed-variant: rgb(73 73 0);
+  --sys-surface-dim: rgb(214, 219, 213);
+  --sys-surface-bright: rgb(245 251 244);
+  --sys-surface-container-lowest: rgb(255 255 255);
+  --sys-surface-container-low: rgb(240 245 239);
+  --sys-surface-container: rgb(234 239 233);
+  --sys-surface-container-high: rgb(228 234 227);
+  --sys-surface-container-highest: rgb(222 228 222);
+}
+
+body {
+  background-color: var(--sys-background);
+}
+
+::-webkit-scrollbar {
+  background-color: #a0a0a5;
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--sys-background);
+}
+::-webkit-scrollbar-track:hover {
+  background-color: #f4f4f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #babac0;
+  border-radius: 16px;
+  border: 3px solid var(--sys-background);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a5;
+  border: 4px solid #f4f4f4;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}

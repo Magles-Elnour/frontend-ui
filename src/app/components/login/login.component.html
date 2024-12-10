@@ -1,0 +1,91 @@
+<section class="d-flex vh-100">
+  @if(userService.isLoading() ){
+  <div class="loading-shade">
+    <mat-spinner></mat-spinner>
+  </div>
+  }
+
+  <div class="h-100 login-section d-flex px-5">
+    <form
+      class="row py-2 my-auto"
+      #loginForm="ngForm"
+      (ngSubmit)="userService.submitLogin(loginForm.value)"
+    >
+      <h1 class="mat-display-small primary-color mb-5">
+        {{ "LOGIN_WELCOME" | transloco }}
+      </h1>
+      <label class="pb-2 mat-title-small" for="email">{{
+        "LOGIN_EMAIL" | transloco
+      }}</label>
+      <mat-form-field class="mb-2 col-12">
+        <input
+          matInput
+          placeholder="{{ 'LOGIN_EMAIL_PLACEHOLDER' | transloco }}"
+          required
+          name="email"
+          email
+          autocomplete="username"
+          [(ngModel)]="credentials.email"
+          #email="ngModel"
+        />
+
+        <mat-error>
+          <app-form-validation [element]="email.control"></app-form-validation>
+        </mat-error>
+      </mat-form-field>
+      <mat-label class="pb-2 mat-title-small" for="password">{{
+        "LOGIN_PASSWORD" | transloco
+      }}</mat-label>
+      <mat-form-field class="col-12">
+        <input
+          matInput
+          placeholder="{{ 'LOGIN_PASSWORD_PLACEHOLDER' | transloco }}"
+          [type]="hide ? 'password' : 'text'"
+          name="password"
+          required
+          autocomplete="current-password"
+          [(ngModel)]="credentials.password"
+          #password="ngModel"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          class="f-18"
+          type="button"
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>
+            {{ hide ? "visibility_off" : "visibility" }}
+          </mat-icon>
+        </button>
+
+        <mat-error>
+          <app-form-validation
+            [element]="password.control"
+          ></app-form-validation>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="d-flex mt-4 justify-content-center">
+        <button
+          type="submit"
+          mat-flat-button
+          id="login-submit-btn"
+          class="w-100"
+          [disabled]="loginForm.invalid"
+        >
+          {{ "LOGIN_BTN" | transloco }}
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="flex-fill d-flex" style="background-color: #f7f8f7">
+    <img
+      class="mw-100 mh-100 m-auto"
+      src="assets/images/login-2.png"
+      alt="Logo"
+    />
+  </div>
+</section>

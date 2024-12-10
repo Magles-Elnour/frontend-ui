@@ -1,0 +1,8 @@
+{
+  "LOGIN_WELCOME": "مرحباً بك",
+  "LOGIN_EMAIL": "البريد الإلكترونى",
+  "LOGIN_EMAIL_PLACEHOLDER": "أدخل البريد الإلكترونى",
+  "LOGIN_PASSWORD": "كلمة المرور",
+  "LOGIN_PASSWORD_PLACEHOLDER": "أدخل كلمة المرور",
+  "LOGIN_BTN": "تسجيل الدخول"
+}

@@ -1,0 +1,59 @@
+<ng-container
+  *ngIf="element()?.errors && (element()?.dirty || element()?.touched)"
+>
+  <mat-error *ngIf="element()?.errors?.['email']">
+    {{ errorMessages.pattern || "Invalid value" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['pattern']">
+    {{ errorMessages.pattern || "Invalid value" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['required']">
+    {{ errorMessages.required || "REQUIRED" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['notSame']">
+    {{ errorMessages.notSame || "PASSWORDS_NOT_SAME" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['amountNotBetween']">
+    {{ errorMessages.amountNotBetween | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['expireDate']">
+    {{ errorMessages.expireDate | transloco }}
+  </mat-error>
+  <mat-error
+    *ngIf="element()?.errors?.['min'] || element()?.errors?.['matDatepickerMin']?.min"
+  >
+    {{ errorMessages.amountNotBetween || "Invalid value" | transloco }}
+  </mat-error>
+  <mat-error
+    *ngIf="element()?.errors?.['max'] || element()?.errors?.['matDatepickerMax']?.max"
+  >
+    {{ errorMessages.amountNotBetween || "Invalid value" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['invalid']">
+    {{ errorMessages.invalidMessage || "Invalid value" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['duplicate']">
+    {{ errorMessages.invalidMessage || "duplicate value" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['maxTime']">
+    {{
+      errorMessages.invalidMessage || "start time after end time" | transloco
+    }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['minTime']">
+    {{
+      errorMessages.invalidMessage || "end time before start time" | transloco
+    }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['autoCompleteRequired']">
+    {{
+      errorMessages.autoCompleteRequired || "AUTO_COMPLETE_REQUIRED" | transloco
+    }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['participantLess']">
+    {{ "CANNOT_ADD_PARTICIPANT_LESS_13" | transloco }}
+  </mat-error>
+  <mat-error *ngIf="element()?.errors?.['instructorLess']">
+    {{ "CANNOT_ADD_INSTRUTOR_LESS_13" | transloco }}
+  </mat-error>
+</ng-container>
