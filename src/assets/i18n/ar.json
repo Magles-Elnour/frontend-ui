@@ -4,5 +4,15 @@
   "LOGIN_EMAIL_PLACEHOLDER": "أدخل البريد الإلكترونى",
   "LOGIN_PASSWORD": "كلمة المرور",
   "LOGIN_PASSWORD_PLACEHOLDER": "أدخل كلمة المرور",
-  "LOGIN_BTN": "تسجيل الدخول"
+  "LOGIN_BTN": "تسجيل الدخول",
+  "LOGOUT_BTN": "",
+  "MEMBERS": "الأعضاء",
+  "MEMBERS_LIST": "أعضاء المجلس",
+  "MEMBERS_ATTENDANCE": "الحضور / الغياب",
+  "CHANTING": "الإنشاد",
+  "CHANTING_LIST": "أعضاء المجلس",
+  "CHANTING_ATTENDANCE": "الحضور / الغياب",
+  "COUNCIL_PROGRAM": "برنامج المجلس",
+  "REPORTS": "التقارير",
+  "MANAGERS": "المديرين"
 }

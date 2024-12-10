@@ -12,7 +12,7 @@ export class UserService {
   constructor() {}
   submitLogin(e: any) {
     this.isLoading.set(true);
-    this.router.navigate(['/', UrlsNames.ADMIN, UrlsNames.DASHBOARD]);
+    this.router.navigate(['/', UrlsNames.ADMIN]);
   }
   logout() {
     this.router.navigate(['/']);

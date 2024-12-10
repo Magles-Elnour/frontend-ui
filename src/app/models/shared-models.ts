@@ -5,15 +5,16 @@ export class Account {
 }
 
 export enum UrlsNames {
-  FAMILIES = 'families',
-  DASHBOARD = 'dashboard',
-  ORPHANS = 'orphans',
-  DISABILITIES = 'disabilities',
-  POOR = 'poor',
-  LOGIN = 'login',
   ADMIN = 'admin',
-  ADD_ORPHANS_FAMILY = 'add-family',
-  EDIT_ORPHANS_FAMILY = 'edit-family',
+  MEMBERS = 'members',
+  MEMBERS_LIST = 'members_list',
+  MEMBERS_ATTENDANCE = 'members_attendance',
+  CHANTING = 'chanting',
+  CHANTING_LIST = 'chanting_list',
+  CHANTING_ATTENDANCE = 'chanting_attendance',
+  COUNCIL_PROGRAM = 'council_program',
+  REPORTS = 'reports',
+  MANAGERS = 'managers',
 }
 export enum UserRoles {
   ADMIN = 'admin',

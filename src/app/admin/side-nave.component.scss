@@ -1,0 +1,66 @@
+:host {
+  .mat-toolbar {
+    --mat-toolbar-standard-height: 114px !important;
+    --mat-toolbar-mobile-height: 60px !important;
+  }
+  ::ng-deep {
+    .mat-expansion-panel {
+      border-bottom: 1px solid var(--sys-outline);
+      --mat-expansion-header-text-color: var(--sys-on-background);
+
+      .mat-expansion-panel-header {
+        padding: 0px 16px !important;
+        border-radius: 12px;
+      }
+      .mat-expansion-panel-body {
+        padding: 0px 36px 0px 0px;
+      }
+      mat-icon {
+        color: var(--sys-primary) !important;
+      }
+      &:has(.is-active) .mat-expansion-panel-header {
+        background-color: var(--sys-primary) !important;
+        --mat-expansion-header-text-color: var(--sys-on-primary) !important;
+        --mat-expansion-header-indicator-color: var(
+          --sys-on-primary
+        ) !important;
+        mat-icon {
+          color: var(--sys-on-primary) !important;
+        }
+      }
+    }
+
+    .mdc-list-item:focus::before,
+    .mdc-list-item:hover::before {
+      background-color: transparent !important;
+    }
+    mat-list-item {
+      margin-bottom: 8px !important;
+      --mat-list-active-indicator-shape: 8px;
+    }
+  }
+  mat-list-item:hover,
+  mat-list-item:focus,
+  .is-active {
+    background-color: var(--sys-primary-container);
+    p {
+      color: var(--sys-primary);
+    }
+  }
+
+  .sidenav-icon-container {
+    border: 1px solid var(--sys-outline);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+  }
+  .list-item-small {
+    width: fit-content;
+    margin: auto;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .mat-drawer {
+    --mat-sidenav-container-width: 330px;
+  }
+}

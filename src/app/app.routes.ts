@@ -9,8 +9,8 @@ export const routes: Routes = [
         (c) => c.LoginComponent
       ),
   },
-  // {
-  //   path: UrlsNames.ADMIN,
-  //   loadChildren: () => import('./admin/admin.routes'),
-  // },
+  {
+    path: UrlsNames.ADMIN,
+    loadChildren: () => import('./admin/admin.routes'),
+  },
 ];

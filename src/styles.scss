@@ -32,6 +32,22 @@ $light-theme: mat.define-theme(
       filled-container-height: 48px,
     )
   );
+  @include mat.sidenav-overrides(
+    (
+      container-shape: 24px,
+      container-background-color: var(--sys-background),
+      container-elevation-shadow: 0px 2px 4px 0px #1212170a,
+      container-divider-color: var(--sys-outline),
+    )
+  );
+  @include mat.expansion-overrides(
+    (
+      container-shape: 0px,
+      container-background-color: var(--sys-background),
+      header-expanded-state-height: 58px,
+      header-collapsed-state-height: 58px,
+    )
+  );
 }
 
 html,
@@ -58,4 +74,12 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 10px !important;
+}
+
+.mat-drawer-side {
+  margin: 24px 24px 24px 0px;
+  border-radius: 24px !important;
+  box-shadow: 0px 0px 0px 1px rgba(18, 18, 23, 0.1),
+    0px 24px 48px rgba(18, 18, 23, 0.03), 0px 10px 18px rgba(18, 18, 23, 0.03),
+    0px 5px 8px rgba(18, 18, 23, 0.04), 0px 2px 4px rgba(18, 18, 23, 0.0399338) !important;
 }

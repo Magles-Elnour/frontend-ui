@@ -28,7 +28,7 @@
           [(ngModel)]="credentials.email"
           #email="ngModel"
         />
-
+        <mat-icon matPrefix> mail </mat-icon>
         <mat-error>
           <app-form-validation [element]="email.control"></app-form-validation>
         </mat-error>
@@ -49,7 +49,7 @@
         />
         <button
           mat-icon-button
-          matSuffix
+          matPrefix
           class="f-18"
           type="button"
           (click)="hide = !hide"
