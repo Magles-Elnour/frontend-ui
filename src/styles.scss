@@ -28,8 +28,17 @@ $light-theme: mat.define-theme(
   );
   @include mat.button-overrides(
     (
-      filled-container-shape: 8px,
       filled-container-height: 48px,
+      outlined-container-height: 48px,
+      protected-container-height: 48px,
+      text-container-height: 48px,
+
+      filled-container-shape: 8px,
+      outlined-container-shape: 8px,
+      protected-container-shape: 8px,
+      text-container-shape: 8px,
+
+      text-label-text-color: var(--sys-on-surface),
     )
   );
   @include mat.sidenav-overrides(
@@ -53,6 +62,8 @@ $light-theme: mat.define-theme(
 html,
 body {
   height: 100%;
+  --mat-option-selected-state-layer-color: var(--sys-primary-container);
+  --mat-select-panel-background-color: var(--sys-surface-bright);
 }
 body {
   margin: 0;

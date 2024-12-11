@@ -1,0 +1,19 @@
+:host {
+  ::ng-deep {
+    mat-form-field.filter-select {
+      --mat-select-enabled-trigger-text-color: var(--sys-on-surface);
+      --mat-form-field-container-vertical-padding: 4px;
+      --mat-form-field-container-height: 32px;
+      &.active {
+        --mat-form-field-outlined-outline-color: var(--sys-primary);
+        --mdc-outlined-text-field-outline-color: var(--sys-primary);
+        .mat-mdc-notch-piece {
+          background-color: var(--sys-primary-container) !important;
+        }
+        .mat-mdc-form-field-infix {
+          z-index: 10000;
+        }
+      }
+    }
+  }
+}

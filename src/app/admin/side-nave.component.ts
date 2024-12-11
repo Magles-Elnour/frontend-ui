@@ -1,14 +1,4 @@
-import {
-  animate,
-  animateChild,
-  group,
-  query,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { NgClass, NgStyle } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -52,63 +42,7 @@ export enum ScreenState {
     NgClass,
     MatExpansionModule,
   ],
-  animations: [
-    trigger('adminSidenav', [
-      state(
-        'closed',
-        style({
-          width: '80px',
-        })
-      ),
-      state(
-        'open',
-        style({
-          width: '260px',
-        })
-      ),
-      transition('* <=> *', [
-        group([
-          query('@titleAnimation', animateChild(), { optional: true }),
-          query('@userNameAnimation', animateChild(), { optional: true }),
-          animate('0.4s cubic-bezier(0.55, 0.31, 0.15, 0.93)'),
-        ]),
-      ]),
-    ]),
-    trigger('titleAnimation', [
-      state(
-        'open',
-        style({
-          width: '95px',
-        })
-      ),
-      state(
-        'closed',
-        style({
-          width: '0',
-        })
-      ),
-      transition('* <=> *', [
-        group([animate('0.9s cubic-bezier(0.55, 0.31, 0.15, 0.93)')]),
-      ]),
-    ]),
-    trigger('userNameAnimation', [
-      state(
-        'open',
-        style({
-          width: '190px',
-        })
-      ),
-      state(
-        'closed',
-        style({
-          width: '0',
-        })
-      ),
-      transition('* <=> *', [
-        group([animate('0.9s cubic-bezier(0.55, 0.31, 0.15, 0.93)')]),
-      ]),
-    ]),
-  ],
+
   templateUrl: './side-nave.component.html',
   styleUrl: './side-nave.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

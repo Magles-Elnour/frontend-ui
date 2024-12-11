@@ -1,0 +1,10 @@
+<div class="pt-2">
+  <h2 class="mat-title-large mt-5 mb-4">
+    @for (title of header(); track $index ;let last= $last) {
+    <span class="{{ last ? 'primary-color' : '' }}">
+      {{ title | transloco }}</span
+    >
+    {{ last ? "" : "/ " }}
+    }
+  </h2>
+</div>

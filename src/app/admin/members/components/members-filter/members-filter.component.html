@@ -1,0 +1,101 @@
+<form class="row" [formGroup]="filterForm" (ngSubmit)="applyFilter()">
+  <div class="row flex-wrap">
+    <mat-form-field class="col" appearance="outline" style="max-width: 486px">
+      <mat-label>{{ "SEARCH_NAME" | transloco }}</mat-label>
+      <input matInput id="name" formControlName="name" />
+      <mat-icon matPrefix> search </mat-icon>
+    </mat-form-field>
+    <div class="col px-0 d-flex">
+      <button class="me-auto ms-2" mat-flat-button>
+        {{ "ADD_MEMBER" | transloco }}<mat-icon> add </mat-icon>
+      </button>
+      <button mat-button class="ms-2">
+        <span> {{ "MEMBER_IMPORT" | transloco }}</span>
+        <mat-icon class="on-surface-variant-color"> arrow_upward </mat-icon>
+      </button>
+      <button mat-button>
+        <span>{{ "MEMBER_EXPORT" | transloco }}</span>
+        <mat-icon class="on-surface-variant-color"> arrow_downward </mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="d-flex">
+    <mat-form-field
+      class="filter-select flex-shrink-0 {{
+        filterForm.get('groupNumber')?.value ? 'active' : ''
+      }}"
+    >
+      <mat-select
+        placeholder="{{ 'SEARCH_GROUP' | transloco }}"
+        formControlName="groupNumber"
+      >
+        <mat-select-trigger>
+          @if(filterForm.get("groupNumber")?.value){
+
+          {{ "SEARCH_GROUP" | transloco }}:
+          <span class="primary-color">{{
+            "THE_" + filterForm.get("groupNumber")?.value | transloco
+          }}</span
+          >}@else { {{ "SEARCH_GROUP" | transloco }}}
+        </mat-select-trigger>
+        @for (group of groups; track group) {
+        <mat-option [value]="group"
+          >{{ "THE_GROUP" | transloco }}
+          {{ "THE_" + group | transloco }}</mat-option
+        >
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field
+      class="filter-select flex-shrink-0  pe-2 {{
+        filterForm.get('partNumber')?.value ? 'active' : ''
+      }}"
+    >
+      <mat-select
+        placeholder="{{ 'SEARCH_PART_NUMBER' | transloco }}"
+        formControlName="partNumber"
+      >
+        <mat-select-trigger>
+          @if(filterForm.get("partNumber")?.value){
+
+          {{ "SEARCH_PART_NUMBER" | transloco }}:
+          <span class="primary-color">{{
+            "THE_P_" + filterForm.get("partNumber")?.value | transloco
+          }}</span
+          >}@else { {{ "SEARCH_PART_NUMBER" | transloco }}}
+        </mat-select-trigger>
+        @for (group of groups; track group) {
+        <mat-option [value]="group"
+          >{{ "THE_PART" | transloco }}
+          {{ "THE_P_" + group | transloco }}</mat-option
+        >
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field
+      class="filter-select flex-shrink-0  pe-2 {{
+        filterForm.get('place')?.value ? 'active' : ''
+      }}"
+    >
+      <mat-select
+        placeholder="{{ 'SEARCH_PLACE' | transloco }}"
+        formControlName="place"
+      >
+        <mat-select-trigger>
+          @if(filterForm.get("place")?.value||filterForm.get("place")?.value==false){
+
+          {{ "SEARCH_PLACE" | transloco }}:
+          <span class="primary-color">{{
+            filterForm.get("place")?.value === false
+              ? ("OUTSIDE" | transloco)
+              : ("INSIDE" | transloco)
+          }}</span
+          >}@else { {{ "SEARCH_PLACE" | transloco }}}
+        </mat-select-trigger>
+
+        <mat-option [value]="true">{{ "INSIDE" | transloco }} </mat-option>
+        <mat-option [value]="false">{{ "OUTSIDE" | transloco }} </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>

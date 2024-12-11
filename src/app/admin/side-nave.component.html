@@ -31,8 +31,6 @@
   />
 </mat-toolbar>
 }
-<!--  -->
-<!--  -->
 <mat-drawer-container class="min-vh-100 vh-100 ps-0">
   <mat-drawer
     [mode]="
@@ -47,119 +45,90 @@
     #adminSidenav
   >
     <div class="d-grid h-100 position-relative px-3">
-      <div>
-        <!-- <div class="d-flex align-items-center w-100 justify-content-between">
-          @if
-          (screen()===ScreenState.mediumClosed||screen()===ScreenState.mediumOpened)
-          {
-          <div
-            class="sidenav-icon-container d-flex align-items-center justify-content-center rouneded-circle"
-            style="position: absolute; z-index: 1000; left: 0px"
-          >
-            @if (screen() === ScreenState.mediumClosed) {
-            <mat-icon
-              class="d-block f-20 outline-color bg-surface-bright cursor-pointer"
-              (click)="screen.set(ScreenState.mediumOpened)"
-              >arrow_back_ios</mat-icon
-            >
-            } @if (screen() === ScreenState.mediumOpened){
-            <mat-icon
-              class="d-block f-20 outline-color bg-surface-bright cursor-pointer"
-              (click)="screen.set(ScreenState.mediumClosed)"
-              >arrow_forward_ios
-            </mat-icon>
-            }
-          </div>
-          }
-        </div> -->
-
-        <div class="py-3">
-          <mat-accordion>
-            @for(item of listItems; let i = $index; track item){
-            <mat-expansion-panel expanded="false" class="mat-elevation-z0">
-              <mat-expansion-panel-header class="my-1">
-                <mat-panel-title>
-                  <mat-icon
-                    class="f-24"
-                    [ngClass]="
-                      screen() === ScreenState.mediumClosed ? ' me-0' : 'ms-3'
-                    "
-                    >{{ item.iconClass }}
-                  </mat-icon>
-                  {{ item.title | transloco }}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <mat-nav-list class="pb-0">
-                @for(nav of item.navList; let i = $index; track nav){
-                <mat-list-item
-                  [routerLink]="nav.link"
-                  [routerLinkActive]="['is-active']"
+      <div class="py-3">
+        <mat-accordion>
+          @for(item of listItems; let i = $index; track item){
+          <mat-expansion-panel expanded="false" class="mat-elevation-z0">
+            <mat-expansion-panel-header class="my-1">
+              <mat-panel-title>
+                <mat-icon
+                  class="f-24"
+                  [ngClass]="
+                    screen() === ScreenState.mediumClosed ? ' me-0' : 'ms-3'
+                  "
+                  >{{ item.iconClass }}
+                </mat-icon>
+                {{ item.title | transloco }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-nav-list class="pb-0">
+              @for(nav of item.navList; let i = $index; track nav){
+              <mat-list-item
+                [routerLink]="nav.link"
+                [routerLinkActive]="['is-active']"
+                [ngClass]="{
+                  'list-item-small': screen() === ScreenState.mediumClosed
+                }"
+              >
+                <div
+                  class="d-flex"
                   [ngClass]="{
-                    'list-item-small': screen() === ScreenState.mediumClosed
+                    'align-items-center justify-content-center ':
+                      screen() === ScreenState.mediumClosed
                   }"
                 >
-                  <div
-                    class="d-flex"
-                    [ngClass]="{
-                      'align-items-center justify-content-center ':
-                        screen() === ScreenState.mediumClosed
-                    }"
+                  <p
+                    class="m-0 mat-label-large overflow-hidden mw-100 text-truncate"
+                    [@titleAnimation]="
+                      screen() === ScreenState.mediumClosed ? 'closed' : 'open'
+                    "
                   >
-                    <p
-                      class="m-0 mat-label-large overflow-hidden mw-100 text-truncate"
-                      [@titleAnimation]="
-                        screen() === ScreenState.mediumClosed
-                          ? 'closed'
-                          : 'open'
-                      "
-                    >
-                      {{ nav.title | transloco }}
-                    </p>
-                  </div>
-                </mat-list-item>
-                }
-              </mat-nav-list>
-            </mat-expansion-panel>
-            }
-          </mat-accordion>
+                    {{ nav.title | transloco }}
+                  </p>
+                </div>
+              </mat-list-item>
+              }
+            </mat-nav-list>
+          </mat-expansion-panel>
+          }
+        </mat-accordion>
 
-          <mat-list-item
-            (click)="userService.logout()"
-            [routerLinkActive]="['is-active']"
+        <mat-list-item
+          (click)="userService.logout()"
+          [routerLinkActive]="['is-active']"
+          [ngClass]="{
+            'list-item-small': screen() === ScreenState.mediumClosed
+          }"
+        >
+          <div
+            class="d-flex"
             [ngClass]="{
-              'list-item-small': screen() === ScreenState.mediumClosed
+              'align-items-center justify-content-center ':
+                screen() === ScreenState.mediumClosed
             }"
           >
-            <div
-              class="d-flex"
-              [ngClass]="{
-                'align-items-center justify-content-center ':
-                  screen() === ScreenState.mediumClosed
-              }"
+            <mat-icon
+              class="f-24"
+              [ngClass]="
+                screen() === ScreenState.mediumClosed ? ' me-0' : 'ms-3'
+              "
+              >logout
+            </mat-icon>
+            <p
+              class="m-0 mat-label-large fw-700 on-surface-variant-color overflow-hidden mw-100 text-truncate"
+              [@titleAnimation]="
+                screen() === ScreenState.mediumClosed ? 'closed' : 'open'
+              "
             >
-              <mat-icon
-                class="f-24"
-                [ngClass]="
-                  screen() === ScreenState.mediumClosed ? ' me-0' : 'ms-3'
-                "
-                >logout
-              </mat-icon>
-              <p
-                class="m-0 mat-label-large fw-700 on-surface-variant-color overflow-hidden mw-100 text-truncate"
-                [@titleAnimation]="
-                  screen() === ScreenState.mediumClosed ? 'closed' : 'open'
-                "
-              >
-                {{ "LOGOUT_BTN" | transloco }}
-              </p>
-            </div>
-          </mat-list-item>
-        </div>
+              {{ "LOGOUT_BTN" | transloco }}
+            </p>
+          </div>
+        </mat-list-item>
       </div>
     </div>
   </mat-drawer>
   <mat-drawer-content class="bg-surface-container-lowest">
-    <div class="container-fliud position-relative pe-4">
+    <div class="container-fliud position-relative px-4 me-0 me-md-4">
       <router-outlet></router-outlet>
     </div>
   </mat-drawer-content>
