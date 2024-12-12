@@ -25,6 +25,8 @@ import {
   switchMap,
 } from 'rxjs';
 import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { UrlsNames } from '../../../../models/shared-models';
 
 @Component({
   selector: 'app-members-filter',
@@ -36,6 +38,7 @@ import { NgClass } from '@angular/common';
     TranslocoPipe,
     MatIcon,
     NgClass,
+    RouterLink,
   ],
   templateUrl: './members-filter.component.html',
   styleUrl: './members-filter.component.scss',
@@ -56,7 +59,7 @@ export class MembersFilterComponent implements OnInit, OnDestroy {
   pageSize = signal(13);
   totalCount = signal(0);
   loading = signal(false);
-
+  urlsNames = UrlsNames;
   applyFilter() {
     this.getMembers();
   }

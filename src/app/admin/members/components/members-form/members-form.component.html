@@ -1,0 +1,129 @@
+<app-page-header [header]="['MEMBERS', 'MEMBERS_ADD']"></app-page-header>
+<section class="section-card p-3">
+  <form #loginForm="ngForm" (ngSubmit)="addOrUpdate()">
+    <div class="p-1 position-relative">
+      <div class="row">
+        @if(loading() ){
+        <div class="loading-shade">
+          <mat-spinner></mat-spinner>
+        </div>
+        }
+        <div
+          class="col-12 mb-3 d-flex flex-wrap justify-content-between align-items-center"
+        >
+          <h2 class="mat-title-large m-0">
+            {{ "MEMBER_DETAILS" | transloco }}
+          </h2>
+          <mat-button-toggle-group
+            [(ngModel)]="member.place"
+            name="place"
+            aria-label="place select"
+            [required]="true"
+          >
+            <mat-button-toggle [value]="false">
+              {{ "INSIDE" | transloco }}</mat-button-toggle
+            >
+
+            <mat-button-toggle [value]="true">{{
+              "OUTSIDE" | transloco
+            }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="pb-2 d-block mat-title-small" for="name">{{
+            "MEMBER_NAME" | transloco
+          }}</label>
+          <mat-form-field class="mb-2 col-12">
+            <input
+              matInput
+              placeholder="{{ 'LMEMBER_NAME_PLACEHOLDER' | transloco }}"
+              required
+              name="name"
+              [(ngModel)]="member.name"
+              #name="ngModel"
+            />
+            <mat-error>
+              <app-form-validation
+                [element]="name.control"
+              ></app-form-validation>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="pb-2 d-block mat-title-small" for="phoneNumber">{{
+            "PHONE_NUMBER" | transloco
+          }}</label>
+          <mat-form-field class="mb-2 col-12">
+            <input
+              matInput
+              placeholder="{{ 'PHONE_NUMBER_PLACEHOLDER' | transloco }}"
+              required
+              name="phoneNumber"
+              [(ngModel)]="member.phoneNumber"
+              #phoneNumber="ngModel"
+            />
+            <span matTextPrefix> 20+ </span>
+            <mat-error>
+              <app-form-validation
+                [element]="phoneNumber.control"
+              ></app-form-validation>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="pb-2 d-block mat-title-small" for="groupNumber">{{
+            "SEARCH_GROUP" | transloco
+          }}</label>
+          <mat-form-field class="mb-2 col-12">
+            <input
+              matInput
+              placeholder="{{ 'SEARCH_GROUP_PLACEHOLDER' | transloco }}"
+              required
+              name="groupNumber"
+              [(ngModel)]="member.groupNumber"
+              #groupNumber="ngModel"
+            />
+
+            <mat-error>
+              <app-form-validation
+                [element]="groupNumber.control"
+              ></app-form-validation>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="pb-2 d-block mat-title-small" for="partNumber">{{
+            "SEARCH_PART_NUMBER" | transloco
+          }}</label>
+          <mat-form-field class="mb-2 col-12">
+            <input
+              matInput
+              placeholder="{{ 'PART_NUMBER_PLACEHOLDER' | transloco }}"
+              required
+              name="partNumber"
+              [(ngModel)]="member.partNumber"
+              #partNumber="ngModel"
+            />
+            <mat-error>
+              <app-form-validation
+                [element]="partNumber.control"
+              ></app-form-validation>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <button
+        mat-flat-button
+        [disabled]="loginForm.invalid || loading()"
+        type="submit"
+      >
+        {{
+          member.id
+            ? ("UPDATE_MEMBER_BTN" | transloco)
+            : ("ADD_MEMBER_BTN" | transloco)
+        }}
+        <mat-icon> save </mat-icon>
+      </button>
+    </div>
+  </form>
+</section>

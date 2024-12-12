@@ -59,5 +59,13 @@
   "MEMBER_NAME": "الإسم",
   "PHONE_NUMBER": "رقم الهاتف",
   "PART_NUMBER": "الجزء",
-  "TABLE_TOOLS": "الأدوات"
+  "TABLE_TOOLS": "الأدوات",
+  "MEMBERS_ADD": "إضافة عضو",
+  "MEMBER_DETAILS": "معلومات العضو",
+  "LMEMBER_NAME_PLACEHOLDER": "أدخل اسم العضو",
+  "PHONE_NUMBER_PLACEHOLDER": "أدخل رقم الهاتف",
+  "SEARCH_GROUP_PLACEHOLDER": "إختر رقم المجموعة",
+  "PART_NUMBER_PLACEHOLDER": "إختر رقم الجزء",
+  "ADD_MEMBER_BTN": "تسجيل العضو",
+  "UPDATE_MEMBER_BTN": "تحديث العضو"
 }

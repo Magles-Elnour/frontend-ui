@@ -22,11 +22,8 @@ export class MembersService {
     return of(membersTestData);
     // this.http.get<MemberResponse>(`/api/member${params ? '?' + params : ''}`);
   }
-  update(member: Member): Observable<Member> {
-    return of(member);
-    // this.http.put<Member>(`/member/${member.id}`, member);
-  }
-  add(member: Member): Observable<Member> {
+
+  addOrUpdate(member: Member): Observable<Member> {
     return of(member);
     // this.http.post<Member>(`/member`, member);
   }

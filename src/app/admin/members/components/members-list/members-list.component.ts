@@ -5,6 +5,10 @@ import { MembersFilterComponent } from '../members-filter/members-filter.compone
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { MatIcon } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
+import { UrlsNames } from '../../../../models/shared-models';
 
 @Component({
   selector: 'app-members-list',
@@ -15,9 +19,14 @@ import { TranslocoPipe } from '@jsverse/transloco';
     MatPaginatorModule,
     MatProgressSpinner,
     TranslocoPipe,
+    MatIcon,
+    MatButtonModule,
+    RouterLink,
   ],
   templateUrl: './members-list.component.html',
   styleUrl: './members-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MembersListComponent {}
+export class MembersListComponent {
+  urlsNames = UrlsNames;
+}

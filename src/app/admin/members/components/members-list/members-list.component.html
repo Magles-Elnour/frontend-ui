@@ -48,10 +48,19 @@
             </td>
             <td class="last-row">
               <button
-                mat-icon-button
-                class="d-flex align-items-center"
-                aria-label="Example icon button with a vertical three dot icon"
-              ></button>
+                mat-stroked-button
+                type="button"
+                [routerLink]="[
+                  '/',
+                  urlsNames.ADMIN,
+                  urlsNames.MEMBERS,
+                  urlsNames.MEMBERS_EDIT,
+                  member.id
+                ]"
+                class="table-btn"
+              >
+                <mat-icon> border_color </mat-icon>
+              </button>
             </td>
           </tr>
           }

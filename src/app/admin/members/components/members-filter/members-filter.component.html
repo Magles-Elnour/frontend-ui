@@ -10,7 +10,17 @@
       <mat-icon matPrefix> search </mat-icon>
     </mat-form-field>
     <div class="col px-0 d-flex">
-      <button class="me-auto ms-2" type="button" mat-flat-button>
+      <button
+        class="me-auto ms-2"
+        [routerLink]="[
+          '/',
+          urlsNames.ADMIN,
+          urlsNames.MEMBERS,
+          urlsNames.MEMBERS_ADD
+        ]"
+        type="button"
+        mat-flat-button
+      >
         {{ "ADD_MEMBER" | transloco }}<mat-icon> add </mat-icon>
       </button>
       <button mat-button type="button" class="ms-2">
