@@ -5,7 +5,6 @@
   "LOGIN_PASSWORD": "كلمة المرور",
   "LOGIN_PASSWORD_PLACEHOLDER": "أدخل كلمة المرور",
   "LOGIN_BTN": "تسجيل الدخول",
-  "LOGOUT_BTN": "",
   "MEMBERS": "الأعضاء",
   "MEMBERS_LIST": "أعضاء المجلس",
   "MEMBERS_ATTENDANCE": "الحضور / الغياب",
@@ -47,12 +46,18 @@
   "THE_P_11": "الحادي عشر",
   "THE_P_12": "الثاني عشر",
   "THE_P_13": "الثالث عشر",
-
+  "LOGOUT_BTN": "تسجيل الخروج",
   "SEARCH_GROUP": "رقم المجموعة",
   "SEARCH_PART_NUMBER": "رقم الجزء",
   "THE_GROUP": "المجموعة",
   "THE_PART": "الجزء",
   "SEARCH_PLACE": "المكان",
   "INSIDE": "بالداخل",
-  "OUTSIDE": "بالخارج"
+  "OUTSIDE": "بالخارج",
+  "GROUP_NUMBER": "المجموعة",
+  "MEMBER_INDEX": "مسلسل",
+  "MEMBER_NAME": "الإسم",
+  "PHONE_NUMBER": "رقم الهاتف",
+  "PART_NUMBER": "الجزء",
+  "TABLE_TOOLS": "الأدوات"
 }

@@ -1,19 +1,23 @@
-<form class="row" [formGroup]="filterForm" (ngSubmit)="applyFilter()">
-  <div class="row flex-wrap">
+<form
+  class="d-flex flex-wrap"
+  [formGroup]="filterForm"
+  (ngSubmit)="applyFilter()"
+>
+  <div class="col-12 d-flex flex-wrap">
     <mat-form-field class="col" appearance="outline" style="max-width: 486px">
       <mat-label>{{ "SEARCH_NAME" | transloco }}</mat-label>
       <input matInput id="name" formControlName="name" />
       <mat-icon matPrefix> search </mat-icon>
     </mat-form-field>
     <div class="col px-0 d-flex">
-      <button class="me-auto ms-2" mat-flat-button>
+      <button class="me-auto ms-2" type="button" mat-flat-button>
         {{ "ADD_MEMBER" | transloco }}<mat-icon> add </mat-icon>
       </button>
-      <button mat-button class="ms-2">
+      <button mat-button type="button" class="ms-2">
         <span> {{ "MEMBER_IMPORT" | transloco }}</span>
         <mat-icon class="on-surface-variant-color"> arrow_upward </mat-icon>
       </button>
-      <button mat-button>
+      <button mat-button type="button">
         <span>{{ "MEMBER_EXPORT" | transloco }}</span>
         <mat-icon class="on-surface-variant-color"> arrow_downward </mat-icon>
       </button>
@@ -21,9 +25,8 @@
   </div>
   <div class="d-flex">
     <mat-form-field
-      class="filter-select flex-shrink-0 {{
-        filterForm.get('groupNumber')?.value ? 'active' : ''
-      }}"
+      class="filter-select flex-shrink-0"
+      [ngClass]="{ active: filterForm.get('groupNumber')?.value }"
     >
       <mat-select
         placeholder="{{ 'SEARCH_GROUP' | transloco }}"
@@ -47,9 +50,8 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field
-      class="filter-select flex-shrink-0  pe-2 {{
-        filterForm.get('partNumber')?.value ? 'active' : ''
-      }}"
+      class="filter-select flex-shrink-0 pe-2"
+      [ngClass]="{ active: filterForm.get('partNumber')?.value }"
     >
       <mat-select
         placeholder="{{ 'SEARCH_PART_NUMBER' | transloco }}"
@@ -73,9 +75,8 @@
       </mat-select>
     </mat-form-field>
     <mat-form-field
-      class="filter-select flex-shrink-0  pe-2 {{
-        filterForm.get('place')?.value ? 'active' : ''
-      }}"
+      class="filter-select flex-shrink-0 pe-2"
+      [ngClass]="{ active: filterForm.get('place')?.value }"
     >
       <mat-select
         placeholder="{{ 'SEARCH_PLACE' | transloco }}"

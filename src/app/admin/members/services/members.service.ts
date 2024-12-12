@@ -1,9 +1,33 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Member, MemberResponse, membersTestData } from '../models/member';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MembersService {
+  private http = inject(HttpClient);
 
-  constructor() { }
+  constructor() {}
+
+  getbyId(id: string): Observable<Member> {
+    return of(membersTestData.content[0]);
+
+    // this.http.get<MemberResponse>(
+    //   `/member/${id}`
+    // );
+  }
+  get(params?: string): Observable<MemberResponse> {
+    return of(membersTestData);
+    // this.http.get<MemberResponse>(`/api/member${params ? '?' + params : ''}`);
+  }
+  update(member: Member): Observable<Member> {
+    return of(member);
+    // this.http.put<Member>(`/member/${member.id}`, member);
+  }
+  add(member: Member): Observable<Member> {
+    return of(member);
+    // this.http.post<Member>(`/member`, member);
+  }
 }

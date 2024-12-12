@@ -20,3 +20,10 @@ export enum UserRoles {
   ADMIN = 'admin',
   USER = 'user',
 }
+
+export interface BEResponse {
+  number: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}

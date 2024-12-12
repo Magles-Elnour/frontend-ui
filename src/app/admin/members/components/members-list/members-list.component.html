@@ -1,6 +1,62 @@
 <app-page-header [header]="['MEMBERS', 'MEMBERS_LIST']"></app-page-header>
 <section class="section-card p-3">
   <div class="p-1">
-    <app-members-filter></app-members-filter>
+    <app-members-filter #membersFilter></app-members-filter>
+    <div class="position-relative">
+      @if(membersFilter.loading() ){
+      <div class="loading-shade">
+        <mat-spinner></mat-spinner>
+      </div>
+      }
+      <mat-paginator
+        [length]="membersFilter.totalCount()"
+        [pageSize]="membersFilter.pageSize()"
+        (page)="membersFilter.onPageChange($event)"
+        aria-label="Select page"
+        [showFirstLastButtons]="true"
+        style="border-radius: 24px 24px 0 0"
+      >
+      </mat-paginator>
+      <table class="funds-table">
+        <thead>
+          <tr>
+            <th>{{ "GROUP_NUMBER" | transloco }}</th>
+            <th class="text-center">{{ "MEMBER_INDEX" | transloco }}</th>
+            <th>{{ "MEMBER_NAME" | transloco }}</th>
+            <th>{{ "PHONE_NUMBER" | transloco }}</th>
+            <th class="text-center">{{ "PART_NUMBER" | transloco }}</th>
+            <th class="text-center">{{ "TABLE_TOOLS" | transloco }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (member of membersFilter.members(); track $index; let
+          index=$index) {
+          <tr>
+            <td>
+              {{ "THE_PART" | transloco }}
+              {{ "THE_P_" + member.groupNumber | transloco }}
+            </td>
+            <td class="text-center">
+              {{ index + 1 }}
+            </td>
+            <td>{{ member.name }}</td>
+            <td>
+              {{ member.phoneNumber }}
+            </td>
+            <td class="text-center">
+              {{ member.partNumber }}
+            </td>
+            <td class="last-row">
+              <button
+                mat-icon-button
+                class="d-flex align-items-center"
+                aria-label="Example icon button with a vertical three dot icon"
+              ></button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </section>
