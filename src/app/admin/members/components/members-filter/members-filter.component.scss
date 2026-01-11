@@ -6,7 +6,7 @@
       --mat-form-field-container-height: 32px;
       &.active {
         --mat-form-field-outlined-outline-color: var(--sys-primary);
-        --mdc-outlined-text-field-outline-color: var(--sys-primary);
+        --mat-form-field-outlined-outline-color: var(--sys-primary);
         .mat-mdc-notch-piece {
           background-color: var(--sys-primary-container) !important;
         }
