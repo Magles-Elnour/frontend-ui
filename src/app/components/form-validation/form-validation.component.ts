@@ -2,7 +2,7 @@ import { Component, OnInit, input } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { NgIf } from '@angular/common';
+
 import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
@@ -10,7 +10,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
   templateUrl: './form-validation.component.html',
   styleUrls: ['./form-validation.component.scss'],
   standalone: true,
-  imports: [NgIf, MatFormFieldModule, TranslocoPipe],
+  imports: [MatFormFieldModule, TranslocoPipe],
 })
 export class FormValidationComponent implements OnInit {
   element = input.required<UntypedFormControl>();

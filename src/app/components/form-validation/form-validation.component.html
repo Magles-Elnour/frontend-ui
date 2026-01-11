@@ -1,59 +1,66 @@
-<ng-container
-  *ngIf="element()?.errors && (element()?.dirty || element()?.touched)"
->
-  <mat-error *ngIf="element()?.errors?.['email']">
-    {{ errorMessages.pattern || "Invalid value" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['pattern']">
-    {{ errorMessages.pattern || "Invalid value" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['required']">
-    {{ errorMessages.required || "REQUIRED" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['notSame']">
-    {{ errorMessages.notSame || "PASSWORDS_NOT_SAME" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['amountNotBetween']">
-    {{ errorMessages.amountNotBetween | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['expireDate']">
-    {{ errorMessages.expireDate | transloco }}
-  </mat-error>
-  <mat-error
-    *ngIf="element()?.errors?.['min'] || element()?.errors?.['matDatepickerMin']?.min"
-  >
-    {{ errorMessages.amountNotBetween || "Invalid value" | transloco }}
-  </mat-error>
-  <mat-error
-    *ngIf="element()?.errors?.['max'] || element()?.errors?.['matDatepickerMax']?.max"
-  >
-    {{ errorMessages.amountNotBetween || "Invalid value" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['invalid']">
-    {{ errorMessages.invalidMessage || "Invalid value" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['duplicate']">
-    {{ errorMessages.invalidMessage || "duplicate value" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['maxTime']">
-    {{
-      errorMessages.invalidMessage || "start time after end time" | transloco
-    }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['minTime']">
-    {{
-      errorMessages.invalidMessage || "end time before start time" | transloco
-    }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['autoCompleteRequired']">
-    {{
-      errorMessages.autoCompleteRequired || "AUTO_COMPLETE_REQUIRED" | transloco
-    }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['participantLess']">
-    {{ "CANNOT_ADD_PARTICIPANT_LESS_13" | transloco }}
-  </mat-error>
-  <mat-error *ngIf="element()?.errors?.['instructorLess']">
-    {{ "CANNOT_ADD_INSTRUTOR_LESS_13" | transloco }}
-  </mat-error>
-</ng-container>
+@if (element()?.errors && (element()?.dirty || element()?.touched)) { @if
+(element()?.errors?.['email']) {
+<mat-error>
+  {{ errorMessages.pattern || "Invalid value" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['pattern']) {
+<mat-error>
+  {{ errorMessages.pattern || "Invalid value" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['required']) {
+<mat-error>
+  {{ errorMessages.required || "REQUIRED" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['notSame']) {
+<mat-error>
+  {{ errorMessages.notSame || "PASSWORDS_NOT_SAME" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['amountNotBetween']) {
+<mat-error>
+  {{ errorMessages.amountNotBetween | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['expireDate']) {
+<mat-error>
+  {{ errorMessages.expireDate | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['min'] ||
+element()?.errors?.['matDatepickerMin']?.min) {
+<mat-error>
+  {{ errorMessages.amountNotBetween || "Invalid value" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['max'] ||
+element()?.errors?.['matDatepickerMax']?.max) {
+<mat-error>
+  {{ errorMessages.amountNotBetween || "Invalid value" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['invalid']) {
+<mat-error>
+  {{ errorMessages.invalidMessage || "Invalid value" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['duplicate']) {
+<mat-error>
+  {{ errorMessages.invalidMessage || "duplicate value" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['maxTime']) {
+<mat-error>
+  {{ errorMessages.invalidMessage || "start time after end time" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['minTime']) {
+<mat-error>
+  {{ errorMessages.invalidMessage || "end time before start time" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['autoCompleteRequired']) {
+<mat-error>
+  {{
+    errorMessages.autoCompleteRequired || "AUTO_COMPLETE_REQUIRED" | transloco
+  }}
+</mat-error>
+} @else if (element()?.errors?.['participantLess']) {
+<mat-error>
+  {{ "CANNOT_ADD_PARTICIPANT_LESS_13" | transloco }}
+</mat-error>
+} @else if (element()?.errors?.['instructorLess']) {
+<mat-error>
+  {{ "CANNOT_ADD_INSTRUTOR_LESS_13" | transloco }}
+</mat-error>
+} }
