@@ -46,7 +46,6 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }} # 'dev' or 'prod'
 
     steps:
       - name: Deploy to Droplet
