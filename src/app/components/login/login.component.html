@@ -8,28 +8,27 @@
     <form
       class="row py-2 my-auto"
       #loginForm="ngForm"
-      (ngSubmit)="userService.submitLogin(loginForm.value)"
+      (ngSubmit)="login()"
     >
       <h1 class="mat-display-small primary-color mb-5">
         {{ "LOGIN_WELCOME" | transloco }}
       </h1>
-      <label class="pb-2 mat-title-small" for="email">{{
-        "LOGIN_EMAIL" | transloco
+      <label class="pb-2 mat-title-small" for="username">{{
+        "LOGIN_USERNAME" | transloco
       }}</label>
       <mat-form-field class="mb-2 col-12">
         <input
           matInput
-          placeholder="{{ 'LOGIN_EMAIL_PLACEHOLDER' | transloco }}"
+          placeholder="{{ 'LOGIN_USERNAME_PLACEHOLDER' | transloco }}"
           required
-          name="email"
-          email
+          name="username"
           autocomplete="username"
-          [(ngModel)]="credentials.email"
-          #email="ngModel"
+          [(ngModel)]="credentials.username"
+          #username="ngModel"
         />
-        <mat-icon matPrefix> mail </mat-icon>
+        <mat-icon matPrefix> person </mat-icon>
         <mat-error>
-          <app-form-validation [element]="email.control"></app-form-validation>
+          <app-form-validation [element]="username.control"></app-form-validation>
         </mat-error>
       </mat-form-field>
       <mat-label class="pb-2 mat-title-small" for="password">{{

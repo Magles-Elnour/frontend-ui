@@ -94,7 +94,7 @@
         </mat-accordion>
 
         <mat-list-item
-          (click)="userService.logout()"
+          (click)="userService.signOut()"
           [routerLinkActive]="['is-active']"
           [ngClass]="{
             'list-item-small': screen() === ScreenState.mediumClosed

@@ -2,16 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  OnDestroy,
-  OnInit,
 } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule,
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,10 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@jsverse/transloco';
 import { UserService } from '../../services/user.service';
-
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
 import { FormValidationComponent } from '../form-validation/form-validation.component';
+import { SnackbarService } from '../../services/snackbar.service';
+
 @Component({
   selector: 'app-login',
   imports: [
@@ -39,22 +30,18 @@ import { FormValidationComponent } from '../form-validation/form-validation.comp
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent {
   userService = inject(UserService);
-  router: Router = inject(Router);
-  credentials: {
-    email?: string;
-    password?: string;
-  } = {};
+  private snackbar = inject(SnackbarService);
+
+  credentials: { username?: string; password?: string } = {};
   hide = true;
-  // loginForm = new FormGroup({
-  //   email: new FormControl('', [Validators.required, Validators.email]),
-  //   password: new FormControl('', Validators.required),
-  // });
-  subscribtion = new Subscription();
-  constructor() {}
-  ngOnDestroy(): void {
-    this.subscribtion.unsubscribe();
+
+  login(): void {
+    this.userService
+      .signIn(this.credentials.username!, this.credentials.password!)
+      .subscribe({
+        error: () => this.snackbar.error('LOGIN_ERROR'),
+      });
   }
-  ngOnInit(): void {}
 }

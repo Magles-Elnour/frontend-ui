@@ -3,12 +3,13 @@ import {
   provideZoneChangeDetection,
   isDevMode,
   LOCALE_ID,
+  importProvidersFrom,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -16,6 +17,8 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { registerLocaleData } from '@angular/common';
 import localeAr from '@angular/common/locales/ar';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 const ArabicRangeLabel = (page: number, pageSize: number, length: number) => {
   if (length == 0 || pageSize == 0) {
@@ -24,8 +27,6 @@ const ArabicRangeLabel = (page: number, pageSize: number, length: number) => {
   return `الصفحة ${page + 1} من ${Math.ceil(
     length / pageSize
   )} /  المجموع: ${length} عنصر `;
-
-  // return `الصفحة ${page + 1} من ${Math.ceil(length / pageSize)} `;
 };
 
 export function getArabicPaginatorIntl() {
@@ -49,7 +50,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    importProvidersFrom(MatSnackBarModule),
     provideTransloco({
       config: {
         availableLangs: ['ar'],
@@ -64,7 +66,6 @@ export const appConfig: ApplicationConfig = {
     },
     { provide: MatPaginatorIntl, useValue: getArabicPaginatorIntl() },
     { provide: MAT_DATE_LOCALE, useValue: 'ar-EG' },
-
     { provide: LOCALE_ID, useValue: 'ar-EG' },
   ],
 };

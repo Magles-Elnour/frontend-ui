@@ -14,7 +14,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { UserRoles, UrlsNames } from '../models/shared-models';
+import { UserRole, UrlsNames } from '../models/shared-models';
 import { UserService } from '../services/user.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -48,7 +48,7 @@ export enum ScreenState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SideNaveComponent {
-  userRoles = UserRoles;
+  userRole = UserRole;
   urlsNames = UrlsNames;
   ScreenState = ScreenState;
   screen = signal('');
@@ -150,7 +150,7 @@ export class SideNaveComponent {
     this.updateSidnavStyle();
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onResize() {
     this.updateSidnavStyle();
   }

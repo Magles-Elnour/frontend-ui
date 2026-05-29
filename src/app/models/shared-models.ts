@@ -1,7 +1,7 @@
-export class Account {
+export interface Account {
   id?: string;
-  name?: string | null;
-  roles?: UserRoles[] | null;
+  username?: string;
+  role?: UserRole;
 }
 
 export enum UrlsNames {
@@ -18,9 +18,11 @@ export enum UrlsNames {
   REPORTS = 'reports',
   MANAGERS = 'managers',
 }
-export enum UserRoles {
-  ADMIN = 'admin',
-  USER = 'user',
+
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  CONTENT_CREATOR = 'CONTENT_CREATOR',
+  USER = 'USER',
 }
 
 export interface BEResponse {

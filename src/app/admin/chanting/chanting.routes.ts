@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { authGuard } from '../../gurds/auth.guard';
-import { UrlsNames, UserRoles } from '../../models/shared-models';
+import { authGuard } from '../../guards/auth.guard';
+import { UrlsNames, UserRole } from '../../models/shared-models';
 
 export default [
   { path: '', redirectTo: UrlsNames.CHANTING_LIST, pathMatch: 'full' },
@@ -11,7 +11,7 @@ export default [
         (m) => m.ChantingListComponent
       ),
     canActivate: [authGuard],
-    data: { expectedRoles: [UserRoles.ADMIN] },
+    data: { expectedRoles: [UserRole.ADMIN] },
   },
   {
     path: UrlsNames.CHANTING_ATTENDANCE,
@@ -20,6 +20,6 @@ export default [
         './components/chanting-attendance/chanting-attendance.component'
       ).then((m) => m.ChantingAttendanceComponent),
     canActivate: [authGuard],
-    data: { expectedRoles: [UserRoles.ADMIN] },
+    data: { expectedRoles: [UserRole.ADMIN] },
   },
 ] satisfies Route[];

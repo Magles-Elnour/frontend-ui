@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
-import { authGuard } from '../../gurds/auth.guard';
-import { UrlsNames, UserRoles } from '../../models/shared-models';
+import { authGuard } from '../../guards/auth.guard';
+import { UrlsNames, UserRole } from '../../models/shared-models';
 
 export default [
   { path: '', redirectTo: UrlsNames.MEMBERS_LIST, pathMatch: 'full' },
@@ -11,7 +11,7 @@ export default [
         (m) => m.MembersListComponent
       ),
     canActivate: [authGuard],
-    data: { expectedRoles: [UserRoles.ADMIN] },
+    data: { expectedRoles: [UserRole.ADMIN] },
   },
   {
     path: UrlsNames.MEMBERS_ATTENDANCE,
@@ -20,7 +20,7 @@ export default [
         './components/members-attendance/members-attendance.component'
       ).then((m) => m.MembersAttendanceComponent),
     canActivate: [authGuard],
-    data: { expectedRoles: [UserRoles.ADMIN] },
+    data: { expectedRoles: [UserRole.ADMIN] },
   },
   {
     path: UrlsNames.MEMBERS_ADD,
@@ -29,7 +29,7 @@ export default [
         (m) => m.MembersFormComponent
       ),
     canActivate: [authGuard],
-    data: { expectedRoles: [UserRoles.ADMIN] },
+    data: { expectedRoles: [UserRole.ADMIN] },
   },
   {
     path: `${UrlsNames.MEMBERS_EDIT}/:id`,
@@ -38,6 +38,6 @@ export default [
         (m) => m.MembersFormComponent
       ),
     canActivate: [authGuard],
-    data: { expectedRoles: [UserRoles.ADMIN] },
+    data: { expectedRoles: [UserRole.ADMIN] },
   },
 ] satisfies Route[];
