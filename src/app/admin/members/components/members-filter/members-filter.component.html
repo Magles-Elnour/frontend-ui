@@ -36,76 +36,25 @@
   <div class="d-flex">
     <mat-form-field
       class="filter-select flex-shrink-0"
-      [ngClass]="{ active: filterForm.get('groupNumber')?.value }"
+      [ngClass]="{ active: filterForm.get('status')?.value }"
     >
       <mat-select
-        placeholder="{{ 'SEARCH_GROUP' | transloco }}"
-        formControlName="groupNumber"
+        placeholder="{{ 'SEARCH_STATUS' | transloco }}"
+        formControlName="status"
       >
         <mat-select-trigger>
-          @if(filterForm.get("groupNumber")?.value){
-
-          {{ "SEARCH_GROUP" | transloco }}:
+          @if(filterForm.get("status")?.value){
+          {{ "SEARCH_STATUS" | transloco }}:
           <span class="primary-color">{{
-            "THE_" + filterForm.get("groupNumber")?.value | transloco
+            "STATUS_" + filterForm.get("status")?.value | transloco
           }}</span
-          >}@else { {{ "SEARCH_GROUP" | transloco }}}
+          >}@else { {{ "SEARCH_STATUS" | transloco }}}
         </mat-select-trigger>
-        @for (group of groups; track group) {
-        <mat-option [value]="group"
-          >{{ "THE_GROUP" | transloco }}
-          {{ "THE_" + group | transloco }}</mat-option
+        @for (status of statuses; track status) {
+        <mat-option [value]="status"
+          >{{ "STATUS_" + status | transloco }}</mat-option
         >
         }
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field
-      class="filter-select flex-shrink-0 pe-2"
-      [ngClass]="{ active: filterForm.get('partNumber')?.value }"
-    >
-      <mat-select
-        placeholder="{{ 'SEARCH_PART_NUMBER' | transloco }}"
-        formControlName="partNumber"
-      >
-        <mat-select-trigger>
-          @if(filterForm.get("partNumber")?.value){
-
-          {{ "SEARCH_PART_NUMBER" | transloco }}:
-          <span class="primary-color">{{
-            "THE_P_" + filterForm.get("partNumber")?.value | transloco
-          }}</span
-          >}@else { {{ "SEARCH_PART_NUMBER" | transloco }}}
-        </mat-select-trigger>
-        @for (group of groups; track group) {
-        <mat-option [value]="group"
-          >{{ "THE_PART" | transloco }}
-          {{ "THE_P_" + group | transloco }}</mat-option
-        >
-        }
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field
-      class="filter-select flex-shrink-0 pe-2"
-      [ngClass]="{ active: filterForm.get('place')?.value }"
-    >
-      <mat-select
-        placeholder="{{ 'SEARCH_PLACE' | transloco }}"
-        formControlName="place"
-      >
-        <mat-select-trigger>
-          @if(filterForm.get("place")?.value||filterForm.get("place")?.value==false){
-
-          {{ "SEARCH_PLACE" | transloco }}:
-          <span class="primary-color">{{
-            filterForm.get("place")?.value === false
-              ? ("OUTSIDE" | transloco)
-              : ("INSIDE" | transloco)
-          }}</span
-          >}@else { {{ "SEARCH_PLACE" | transloco }}}
-        </mat-select-trigger>
-
-        <mat-option [value]="true">{{ "INSIDE" | transloco }} </mat-option>
-        <mat-option [value]="false">{{ "OUTSIDE" | transloco }} </mat-option>
       </mat-select>
     </mat-form-field>
   </div>

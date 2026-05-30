@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MembersService } from '../../services/members.service';
-import { Member } from '../../models/member';
+import { Member, MemberStatus } from '../../models/member';
 import {
   catchError,
   debounceTime,
@@ -27,6 +27,7 @@ import {
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { UrlsNames } from '../../../../models/shared-models';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-members-filter',
@@ -49,17 +50,16 @@ export class MembersFilterComponent implements OnInit, OnDestroy {
   membersService = inject(MembersService);
   filterForm = this.fb.group({
     name: new FormControl<string | null>(null),
-    groupNumber: new FormControl<number | null>(null),
-    partNumber: new FormControl<number | null>(null),
-    place: new FormControl<boolean | null>(null),
+    status: new FormControl<MemberStatus | null>(null),
   });
-  groups = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+  statuses = Object.values(MemberStatus);
   members = signal<Member[]>([]);
-  pageNumber = signal(1);
-  pageSize = signal(13);
+  pageNumber = signal(0);
+  pageSize = signal(20);
   totalCount = signal(0);
   loading = signal(false);
   urlsNames = UrlsNames;
+
   applyFilter() {
     this.getMembers();
   }
@@ -71,22 +71,22 @@ export class MembersFilterComponent implements OnInit, OnDestroy {
     this.formSubscription.add(
       this.filterForm.valueChanges
         .pipe(
-          startWith(this.filterForm.value),
           debounceTime(500),
           distinctUntilChanged(),
           switchMap((filter) => {
             this.loading.set(true);
-            this.pageNumber.set(1);
+            this.pageNumber.set(0);
             return this.membersService
-              .get(this.filterToString(filter))
+              .get(this.buildParams(filter))
               .pipe(
-                finalize(() => setTimeout(() => this.loading.set(false), 1000))
+                catchError(() => of({ content: [], number: 0, size: 0, totalElements: 0, totalPages: 0 })),
+                finalize(() => setTimeout(() => this.loading.set(false), 300))
               );
           })
         )
-        .subscribe((members) => {
-          this.members.set(members.content);
-          this.totalCount.set(members.totalElements);
+        .subscribe((response) => {
+          this.members.set(response.content);
+          this.totalCount.set(response.totalElements);
         })
     );
   }
@@ -94,24 +94,29 @@ export class MembersFilterComponent implements OnInit, OnDestroy {
   getMembers() {
     this.loading.set(true);
     this.membersService
-      .get(this.filterToString(this.filterForm.value))
-      .pipe(finalize(() => setTimeout(() => this.loading.set(false), 1000)))
-      .subscribe((members) => {
-        this.members.set(members.content);
-        this.totalCount.set(members.totalElements); // Set total count for paginator
+      .get(this.buildParams(this.filterForm.value))
+      .pipe(
+        catchError(() => of({ content: [], number: 0, size: 0, totalElements: 0, totalPages: 0 })),
+        finalize(() => setTimeout(() => this.loading.set(false), 300))
+      )
+      .subscribe((response) => {
+        this.members.set(response.content);
+        this.totalCount.set(response.totalElements);
       });
   }
 
-  filterToString(filter: any) {
-    const params = new URLSearchParams();
-    params.set('page', this.pageNumber().toString());
-    params.set('size', this.pageSize.toString());
-    Object.entries(filter).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        params.append(key, value.toString());
-      }
-    });
-    return params.toString();
+  buildParams(filter: any): HttpParams {
+    let params = new HttpParams()
+      .set('page', this.pageNumber().toString())
+      .set('size', this.pageSize().toString());
+
+    if (filter.name) {
+      params = params.set('name', filter.name);
+    }
+    if (filter.status) {
+      params = params.set('status', filter.status);
+    }
+    return params;
   }
 
   ngOnDestroy() {
@@ -119,9 +124,10 @@ export class MembersFilterComponent implements OnInit, OnDestroy {
       this.formSubscription.unsubscribe();
     }
   }
+
   onPageChange(event: any) {
     this.pageNumber.set(event.pageIndex);
-
-    this.getMembers(); // Fetch members with updated pagination
+    this.pageSize.set(event.pageSize);
+    this.getMembers();
   }
 }

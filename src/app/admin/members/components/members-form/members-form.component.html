@@ -1,6 +1,6 @@
-<app-page-header [header]="['MEMBERS', 'MEMBERS_ADD']"></app-page-header>
+<app-page-header [header]="['MEMBERS', isEditMode ? 'MEMBERS_EDIT' : 'MEMBERS_ADD']"></app-page-header>
 <section class="section-card p-3">
-  <form #loginForm="ngForm" (ngSubmit)="addOrUpdate()">
+  <form #memberForm="ngForm" (ngSubmit)="addOrUpdate()">
     <div class="p-1 position-relative">
       <div class="row">
         @if(loading() ){
@@ -14,20 +14,6 @@
           <h2 class="mat-title-large m-0">
             {{ "MEMBER_DETAILS" | transloco }}
           </h2>
-          <mat-button-toggle-group
-            [(ngModel)]="member.place"
-            name="place"
-            aria-label="place select"
-            [required]="true"
-          >
-            <mat-button-toggle [value]="false">
-              {{ "INSIDE" | transloco }}</mat-button-toggle
-            >
-
-            <mat-button-toggle [value]="true">{{
-              "OUTSIDE" | transloco
-            }}</mat-button-toggle>
-          </mat-button-toggle-group>
         </div>
         <div class="col-12 col-md-6">
           <label class="pb-2 d-block mat-title-small" for="name">{{
@@ -57,56 +43,33 @@
             <input
               matInput
               placeholder="{{ 'PHONE_NUMBER_PLACEHOLDER' | transloco }}"
-              required
               name="phoneNumber"
               [(ngModel)]="member.phoneNumber"
               #phoneNumber="ngModel"
             />
             <span matTextPrefix> 20+ </span>
-            <mat-error>
-              <app-form-validation
-                [element]="phoneNumber.control"
-              ></app-form-validation>
-            </mat-error>
           </mat-form-field>
         </div>
         <div class="col-12 col-md-6">
-          <label class="pb-2 d-block mat-title-small" for="groupNumber">{{
-            "SEARCH_GROUP" | transloco
+          <label class="pb-2 d-block mat-title-small" for="status">{{
+            "STATUS" | transloco
           }}</label>
           <mat-form-field class="mb-2 col-12">
-            <input
-              matInput
-              placeholder="{{ 'SEARCH_GROUP_PLACEHOLDER' | transloco }}"
+            <mat-select
+              name="status"
+              [(ngModel)]="member.status"
               required
-              name="groupNumber"
-              [(ngModel)]="member.groupNumber"
-              #groupNumber="ngModel"
-            />
-
+              #status="ngModel"
+            >
+              @for (s of statuses; track s) {
+              <mat-option [value]="s">{{
+                "STATUS_" + s | transloco
+              }}</mat-option>
+              }
+            </mat-select>
             <mat-error>
               <app-form-validation
-                [element]="groupNumber.control"
-              ></app-form-validation>
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-12 col-md-6">
-          <label class="pb-2 d-block mat-title-small" for="partNumber">{{
-            "SEARCH_PART_NUMBER" | transloco
-          }}</label>
-          <mat-form-field class="mb-2 col-12">
-            <input
-              matInput
-              placeholder="{{ 'PART_NUMBER_PLACEHOLDER' | transloco }}"
-              required
-              name="partNumber"
-              [(ngModel)]="member.partNumber"
-              #partNumber="ngModel"
-            />
-            <mat-error>
-              <app-form-validation
-                [element]="partNumber.control"
+                [element]="status.control"
               ></app-form-validation>
             </mat-error>
           </mat-form-field>
@@ -114,11 +77,11 @@
       </div>
       <button
         mat-flat-button
-        [disabled]="loginForm.invalid || loading()"
+        [disabled]="memberForm.invalid || loading()"
         type="submit"
       >
         {{
-          member.id
+          isEditMode
             ? ("UPDATE_MEMBER_BTN" | transloco)
             : ("ADD_MEMBER_BTN" | transloco)
         }}

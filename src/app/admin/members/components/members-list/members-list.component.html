@@ -20,31 +20,26 @@
       <table class="funds-table">
         <thead>
           <tr>
-            <th>{{ "GROUP_NUMBER" | transloco }}</th>
             <th class="text-center">{{ "MEMBER_INDEX" | transloco }}</th>
             <th>{{ "MEMBER_NAME" | transloco }}</th>
             <th>{{ "PHONE_NUMBER" | transloco }}</th>
-            <th class="text-center">{{ "PART_NUMBER" | transloco }}</th>
+            <th class="text-center">{{ "STATUS" | transloco }}</th>
             <th class="text-center">{{ "TABLE_TOOLS" | transloco }}</th>
           </tr>
         </thead>
         <tbody>
-          @for (member of membersFilter.members(); track $index; let
+          @for (member of membersFilter.members(); track member.id; let
           index=$index) {
           <tr>
-            <td>
-              {{ "THE_PART" | transloco }}
-              {{ "THE_P_" + member.groupNumber | transloco }}
-            </td>
             <td class="text-center">
-              {{ index + 1 }}
+              {{ membersFilter.pageNumber() * membersFilter.pageSize() + index + 1 }}
             </td>
             <td>{{ member.name }}</td>
             <td>
               {{ member.phoneNumber }}
             </td>
             <td class="text-center">
-              {{ member.partNumber }}
+              {{ "STATUS_" + member.status | transloco }}
             </td>
             <td class="last-row">
               <button

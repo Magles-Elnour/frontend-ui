@@ -70,5 +70,14 @@
   "SEARCH_GROUP_PLACEHOLDER": "إختر رقم المجموعة",
   "PART_NUMBER_PLACEHOLDER": "إختر رقم الجزء",
   "ADD_MEMBER_BTN": "تسجيل العضو",
-  "UPDATE_MEMBER_BTN": "تحديث العضو"
+  "UPDATE_MEMBER_BTN": "تحديث العضو",
+  "MEMBERS_EDIT": "تعديل العضو",
+  "STATUS": "الحالة",
+  "SEARCH_STATUS": "الحالة",
+  "STATUS_ACTIVE": "نشط",
+  "STATUS_SUSPENDED": "موقوف",
+  "STATUS_REMOVED": "محذوف",
+  "STATUS_DIED": "متوفى",
+  "MEMBERS_ADD_SUCCESS": "تم إضافة العضو بنجاح",
+  "MEMBERS_UPDATE_SUCCESS": "تم تحديث العضو بنجاح"
 }
