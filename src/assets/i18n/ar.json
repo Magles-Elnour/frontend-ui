@@ -74,10 +74,12 @@
   "MEMBERS_EDIT": "تعديل العضو",
   "STATUS": "الحالة",
   "SEARCH_STATUS": "الحالة",
+  "STATUS_ALL": "الكل",
   "STATUS_ACTIVE": "نشط",
   "STATUS_SUSPENDED": "موقوف",
   "STATUS_REMOVED": "محذوف",
   "STATUS_DIED": "متوفى",
+  "CLEAR_FILTERS": "إلغاء التصفية",
   "MEMBERS_ADD_SUCCESS": "تم إضافة العضو بنجاح",
   "MEMBERS_UPDATE_SUCCESS": "تم تحديث العضو بنجاح"
 }

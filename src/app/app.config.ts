@@ -4,8 +4,11 @@ import {
   isDevMode,
   LOCALE_ID,
   importProvidersFrom,
+  provideAppInitializer,
+  inject,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -19,6 +22,7 @@ import localeAr from '@angular/common/locales/ar';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { authInterceptor } from './interceptors/auth.interceptor';
+import { UserService } from './services/user.service';
 
 const ArabicRangeLabel = (page: number, pageSize: number, length: number) => {
   if (length == 0 || pageSize == 0) {
@@ -48,9 +52,12 @@ registerLocaleData(localeAr);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    // Restore the session from the refresh-token cookie BEFORE the router/guards run,
+    // so a full page reload doesn't bounce an authenticated user back to login.
+    provideAppInitializer(() => firstValueFrom(inject(UserService).initSession())),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(MatSnackBarModule),
     provideTransloco({
       config: {

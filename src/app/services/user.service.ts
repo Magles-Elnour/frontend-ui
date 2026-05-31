@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { finalize, map, Observable, switchMap, tap } from 'rxjs';
+import { catchError, finalize, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Account, UrlsNames, UserRole } from '../models/shared-models';
 
 interface AuthResponse {
@@ -41,6 +41,25 @@ export class UserService {
     return this.http.post<AuthResponse>('/api/auth/refresh', {}).pipe(
       tap((res) => this.accessToken.set(res.accessToken)),
       map(() => void 0)
+    );
+  }
+
+  /**
+   * Restores the session on app startup. The access token lives only in memory and is
+   * lost on a full page reload, but the refresh token is an HttpOnly cookie that
+   * survives. This exchanges that cookie for a fresh access token + user profile so a
+   * refresh doesn't log the user out. Never errors: if there's no valid cookie the
+   * session simply stays cleared.
+   */
+  initSession(): Observable<void> {
+    return this.http.post<AuthResponse>('/api/auth/refresh', {}).pipe(
+      tap((res) => this.accessToken.set(res.accessToken)),
+      switchMap(() => this.fetchCurrentUser()),
+      catchError(() => {
+        this.accessToken.set(null);
+        this.user.set(null);
+        return of(void 0);
+      })
     );
   }
 

@@ -50,6 +50,7 @@
           }}</span
           >}@else { {{ "SEARCH_STATUS" | transloco }}}
         </mat-select-trigger>
+        <mat-option [value]="null">{{ "STATUS_ALL" | transloco }}</mat-option>
         @for (status of statuses; track status) {
         <mat-option [value]="status"
           >{{ "STATUS_" + status | transloco }}</mat-option
@@ -57,5 +58,16 @@
         }
       </mat-select>
     </mat-form-field>
+    @if (hasActiveFilters()) {
+    <button
+      mat-button
+      type="button"
+      class="ms-2 flex-shrink-0"
+      (click)="clearFilters()"
+    >
+      {{ "CLEAR_FILTERS" | transloco }}
+      <mat-icon class="on-surface-variant-color"> close </mat-icon>
+    </button>
+    }
   </div>
 </form>

@@ -64,6 +64,17 @@ export class MembersFilterComponent implements OnInit, OnDestroy {
     this.getMembers();
   }
 
+  /** Whether any filter is currently active (controls visibility of the clear button). */
+  hasActiveFilters(): boolean {
+    const { name, status } = this.filterForm.value;
+    return !!name || !!status;
+  }
+
+  /** Resets name + status so the list returns to showing everything. */
+  clearFilters() {
+    this.filterForm.reset({ name: null, status: null });
+  }
+
   private formSubscription = new Subscription();
 
   ngOnInit() {
