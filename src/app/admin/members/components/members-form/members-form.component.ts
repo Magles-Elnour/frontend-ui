@@ -20,6 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { FormValidationComponent } from '../../../../components/form-validation/form-validation.component';
 import { MatButtonModule } from '@angular/material/button';
+import { PhoneValidatorDirective } from '../../validators/phone.validator';
 
 @Component({
   selector: 'app-members-form',
@@ -34,6 +35,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     FormValidationComponent,
     MatButtonModule,
+    PhoneValidatorDirective,
   ],
   templateUrl: './members-form.component.html',
   styleUrl: './members-form.component.scss',

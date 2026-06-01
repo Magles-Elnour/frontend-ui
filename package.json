@@ -22,6 +22,7 @@
     "@angular/router": "^21.2.15",
     "@jsverse/transloco": "^7.5.0",
     "bootstrap": "^5.3.3",
+    "libphonenumber-js": "^1.13.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

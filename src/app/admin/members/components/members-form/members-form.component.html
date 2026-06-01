@@ -45,10 +45,10 @@
               placeholder="{{ 'PHONE_NUMBER_PLACEHOLDER' | transloco }}"
               name="phoneNumber"
               [(ngModel)]="member.phoneNumber"
-              pattern="^\+?[0-9٠-٩]{6,15}$"
+              appPhone
               #phoneNumber="ngModel"
             />
-            @if (phoneNumber.control.hasError('pattern')) {
+            @if (phoneNumber.control.hasError('phone')) {
             <mat-error>{{ "PHONE_INVALID" | transloco }}</mat-error>
             }
           </mat-form-field>
