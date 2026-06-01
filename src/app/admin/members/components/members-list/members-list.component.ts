@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { UrlsNames } from '../../../../models/shared-models';
 import { MembersService } from '../../services/members.service';
-import { Member } from '../../models/member';
+import { Member, MemberStatus } from '../../models/member';
 import { SnackbarService } from '../../../../services/snackbar.service';
 
 @Component({
@@ -37,6 +37,7 @@ import { SnackbarService } from '../../../../services/snackbar.service';
 })
 export class MembersListComponent {
   urlsNames = UrlsNames;
+  readonly MemberStatus = MemberStatus;
 
   private membersService = inject(MembersService);
   private snackbar = inject(SnackbarService);
