@@ -78,16 +78,23 @@ export class MembersFormComponent {
 
     operation
       .pipe(finalize(() => setTimeout(() => this.loading.set(false), 300)))
-      .subscribe((member) => {
-        this.snackbarService.success(
-          `${this.isEditMode ? 'MEMBERS_UPDATE_SUCCESS' : 'MEMBERS_ADD_SUCCESS'}`
-        );
-        this.router.navigate([
-          '/',
-          UrlsNames.ADMIN,
-          UrlsNames.MEMBERS,
-          UrlsNames.MEMBERS_LIST,
-        ]);
+      .subscribe({
+        next: () => {
+          this.snackbarService.success(
+            `${this.isEditMode ? 'MEMBERS_UPDATE_SUCCESS' : 'MEMBERS_ADD_SUCCESS'}`
+          );
+          this.router.navigate([
+            '/',
+            UrlsNames.ADMIN,
+            UrlsNames.MEMBERS,
+            UrlsNames.MEMBERS_LIST,
+          ]);
+        },
+        // Surface failures (e.g. validation 400) instead of silently doing nothing.
+        error: () =>
+          this.snackbarService.error(
+            this.isEditMode ? 'MEMBERS_UPDATE_ERROR' : 'MEMBERS_ADD_ERROR'
+          ),
       });
   }
 }

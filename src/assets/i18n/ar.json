@@ -85,5 +85,7 @@
   "MEMBER_DELETE_SUCCESS": "تم حذف العضو بنجاح",
   "MEMBER_DELETE_ERROR": "تعذر حذف العضو",
   "MEMBERS_ADD_SUCCESS": "تم إضافة العضو بنجاح",
-  "MEMBERS_UPDATE_SUCCESS": "تم تحديث العضو بنجاح"
+  "MEMBERS_UPDATE_SUCCESS": "تم تحديث العضو بنجاح",
+  "MEMBERS_ADD_ERROR": "تعذر إضافة العضو، تحقق من البيانات المدخلة",
+  "MEMBERS_UPDATE_ERROR": "تعذر تحديث العضو، تحقق من البيانات المدخلة"
 }
