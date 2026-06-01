@@ -56,6 +56,15 @@
               >
                 <mat-icon> border_color </mat-icon>
               </button>
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn ms-2"
+                (click)="deleteMember(member)"
+                [attr.aria-label]="'MEMBER_DELETE' | transloco"
+              >
+                <mat-icon> delete </mat-icon>
+              </button>
             </td>
           </tr>
           }

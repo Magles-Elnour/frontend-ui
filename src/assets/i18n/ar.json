@@ -80,6 +80,10 @@
   "STATUS_REMOVED": "محذوف",
   "STATUS_DIED": "متوفى",
   "CLEAR_FILTERS": "إلغاء التصفية",
+  "MEMBER_DELETE": "حذف",
+  "MEMBER_DELETE_CONFIRM": "هل أنت متأكد من حذف العضو \"{{name}}\"؟ سيتم نقله إلى المحذوفين مع الاحتفاظ بسجله.",
+  "MEMBER_DELETE_SUCCESS": "تم حذف العضو بنجاح",
+  "MEMBER_DELETE_ERROR": "تعذر حذف العضو",
   "MEMBERS_ADD_SUCCESS": "تم إضافة العضو بنجاح",
   "MEMBERS_UPDATE_SUCCESS": "تم تحديث العضو بنجاح"
 }
