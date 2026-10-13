@@ -4,7 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { PageHeaderComponent } from '../../../../components/page-header/page-header.component';
+import { PageHeaderComponent } from '../../../../core/components/page-header/page-header.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Member, MemberStatus } from '../../models/member';
@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { FormValidationComponent } from '../../../../components/form-validation/form-validation.component';
+import { FormValidationComponent } from '../../../../core/components/form-validation/form-validation.component';
 import { MatButtonModule } from '@angular/material/button';
 import { PhoneValidatorDirective } from '../../validators/phone.validator';
 
@@ -74,16 +74,17 @@ export class MembersFormComponent {
       startDate: this.member.startDate,
     };
 
-    const operation = this.isEditMode && this.member.id
-      ? this.membersService.update(this.member.id, request)
-      : this.membersService.create(request);
+    const operation =
+      this.isEditMode && this.member.id
+        ? this.membersService.update(this.member.id, request)
+        : this.membersService.create(request);
 
     operation
       .pipe(finalize(() => setTimeout(() => this.loading.set(false), 300)))
       .subscribe({
         next: () => {
           this.snackbarService.success(
-            `${this.isEditMode ? 'MEMBERS_UPDATE_SUCCESS' : 'MEMBERS_ADD_SUCCESS'}`
+            `${this.isEditMode ? 'MEMBERS_UPDATE_SUCCESS' : 'MEMBERS_ADD_SUCCESS'}`,
           );
           this.router.navigate([
             '/',
@@ -95,7 +96,7 @@ export class MembersFormComponent {
         // Surface failures (e.g. validation 400) instead of silently doing nothing.
         error: () =>
           this.snackbarService.error(
-            this.isEditMode ? 'MEMBERS_UPDATE_ERROR' : 'MEMBERS_ADD_ERROR'
+            this.isEditMode ? 'MEMBERS_UPDATE_ERROR' : 'MEMBERS_ADD_ERROR',
           ),
       });
   }
