@@ -23,13 +23,15 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { UserService } from './services/user.service';
+import { httpRequestInterceptor } from './core/interceptors/http/http-request.interceptor';
+import { mockApiInterceptor } from './core/mock/mock-api.interceptor';
 
 const ArabicRangeLabel = (page: number, pageSize: number, length: number) => {
   if (length == 0 || pageSize == 0) {
     return `1 من ${page + 1} الصفحة`;
   }
   return `الصفحة ${page + 1} من ${Math.ceil(
-    length / pageSize
+    length / pageSize,
   )} /  المجموع: ${length} عنصر `;
 };
 
@@ -52,10 +54,14 @@ registerLocaleData(localeAr);
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withInterceptors([mockApiInterceptor, authInterceptor, httpRequestInterceptor]),
+    ),
     // Restore the session from the refresh-token cookie BEFORE the router/guards run,
     // so a full page reload doesn't bounce an authenticated user back to login.
-    provideAppInitializer(() => firstValueFrom(inject(UserService).initSession())),
+    provideAppInitializer(() =>
+      firstValueFrom(inject(UserService).initSession()),
+    ),
     provideRouter(routes),
     provideAnimationsAsync(),
     importProvidersFrom(MatSnackBarModule),
@@ -67,6 +73,7 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslocoHttpLoader,
     }),
+
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline' },

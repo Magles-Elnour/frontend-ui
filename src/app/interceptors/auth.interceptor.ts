@@ -5,6 +5,8 @@ import { UserService } from '../services/user.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const userService = inject(UserService);
+  if (userService.mockAuthEnabled) return next(req);
+
   const isAuthEndpoint = req.url.includes('/api/auth/');
   const token = userService.accessToken();
 

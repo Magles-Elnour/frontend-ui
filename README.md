@@ -12,6 +12,22 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+Temporary mock APIs and login are enabled for development builds while backend CORS is being
+fixed. Enter any non-empty username and password to sign in as a local admin.
+The session survives page reloads in the same tab, and logout clears it. Login,
+session restoration, and logout do not call the backend in this mode, and the fake
+token is never attached to API requests. All `/api/` requests stay local. The current
+auth and member endpoints return mock responses, including member creation, editing,
+soft deletion, name/status filters, and pagination. The members list starts with
+eight sample records, and changes persist across reloads in browser local storage.
+Translation files and other assets load normally. Unknown API endpoints return a
+local 404 instead of contacting the backend.
+
+To restore the real backend and login in development, set `ENABLE_MOCK_BACKEND` to
+`false` in `src/app/core/auth/auth.config.ts`. Production builds always use the real
+backend. To reset the sample member data, remove `mock-api-members-v1` from browser
+local storage and reload.
+
 ## Code scaffolding
 
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
