@@ -1,0 +1,17 @@
+@if (label()) {
+  <label class="pb-2 d-block mat-title-small" [attr.for]="inputId()">{{
+    label()! | transloco
+  }}</label>
+}
+<mat-form-field class="mb-2 col-12">
+  <input
+    matInput
+    [id]="inputId()"
+    [type]="type()"
+    [formControl]="control()"
+    [placeholder]="(placeholder() ?? '') | transloco"
+  />
+  <mat-error>
+    <app-form-validation [element]="control()"></app-form-validation>
+  </mat-error>
+</mat-form-field>

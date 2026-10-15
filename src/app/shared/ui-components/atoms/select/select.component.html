@@ -1,0 +1,19 @@
+@if (label()) {
+  <label class="pb-2 d-block mat-title-small" [attr.for]="selectId()">{{
+    label()! | transloco
+  }}</label>
+}
+<mat-form-field class="mb-2 col-12">
+  <mat-select
+    [id]="selectId()"
+    [formControl]="control()"
+    [placeholder]="(placeholder() ?? '') | transloco"
+  >
+    @for (option of options(); track option.value) {
+      <mat-option [value]="option.value">{{ option.label | transloco }}</mat-option>
+    }
+  </mat-select>
+  <mat-error>
+    <app-form-validation [element]="control()"></app-form-validation>
+  </mat-error>
+</mat-form-field>
