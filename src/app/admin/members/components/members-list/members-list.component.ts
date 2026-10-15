@@ -4,7 +4,7 @@ import {
   inject,
   viewChild,
 } from '@angular/core';
-import { PageHeaderComponent } from '../../../../core/components/page-header/page-header.component';
+import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
 import { MatCardModule } from '@angular/material/card';
 import { MembersFilterComponent } from '../members-filter/members-filter.component';
 import { MatPaginatorModule } from '@angular/material/paginator';

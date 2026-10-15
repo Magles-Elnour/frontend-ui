@@ -4,7 +4,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { PageHeaderComponent } from '../../../../core/components/page-header/page-header.component';
+import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Member, MemberStatus } from '../../models/member';
@@ -18,7 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
-import { FormValidationComponent } from '../../../../core/components/form-validation/form-validation.component';
+import { FormValidationComponent } from '../../../../shared/ui-components/atoms/form-validation/form-validation.component';
 import { MatButtonModule } from '@angular/material/button';
 import { PhoneValidatorDirective } from '../../validators/phone.validator';
 
