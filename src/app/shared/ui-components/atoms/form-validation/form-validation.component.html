@@ -11,6 +11,8 @@
     <mat-error>
       {{ errorMessages.required || "REQUIRED" | transloco }}
     </mat-error>
+  } @else if (element().errors?.["phone"]) {
+    <mat-error>{{ "PHONE_INVALID" | transloco }}</mat-error>
   } @else if (element().errors?.["notSame"]) {
     <mat-error>
       {{ errorMessages.notSame || "PASSWORDS_NOT_SAME" | transloco }}

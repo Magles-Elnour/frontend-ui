@@ -1,13 +1,11 @@
-<app-page-header [header]="['MEMBERS', isEditMode ? 'MEMBERS_EDIT' : 'MEMBERS_ADD']"></app-page-header>
+<app-page-header
+  [header]="['MEMBERS', isEditMode ? 'MEMBERS_EDIT' : 'MEMBERS_ADD']"
+></app-page-header>
 <section class="section-card p-3">
-  <form #memberForm="ngForm" (ngSubmit)="addOrUpdate()">
+  <form [formGroup]="form" (ngSubmit)="addOrUpdate()">
     <div class="p-1 position-relative">
+      <app-loading-shade [show]="loading()"></app-loading-shade>
       <div class="row">
-        @if(loading() ){
-        <div class="loading-shade">
-          <mat-spinner></mat-spinner>
-        </div>
-        }
         <div
           class="col-12 mb-3 d-flex flex-wrap justify-content-between align-items-center"
         >
@@ -16,71 +14,30 @@
           </h2>
         </div>
         <div class="col-12 col-md-6">
-          <label class="pb-2 d-block mat-title-small" for="name">{{
-            "MEMBER_NAME" | transloco
-          }}</label>
-          <mat-form-field class="mb-2 col-12">
-            <input
-              matInput
-              placeholder="{{ 'LMEMBER_NAME_PLACEHOLDER' | transloco }}"
-              required
-              name="name"
-              [(ngModel)]="member.name"
-              #name="ngModel"
-            />
-            <mat-error>
-              <app-form-validation
-                [element]="name.control"
-              ></app-form-validation>
-            </mat-error>
-          </mat-form-field>
+          <app-input
+            [control]="form.controls.name"
+            label="MEMBER_NAME"
+            placeholder="LMEMBER_NAME_PLACEHOLDER"
+          ></app-input>
         </div>
         <div class="col-12 col-md-6">
-          <label class="pb-2 d-block mat-title-small" for="phoneNumber">{{
-            "PHONE_NUMBER" | transloco
-          }}</label>
-          <mat-form-field class="mb-2 col-12">
-            <input
-              matInput
-              placeholder="{{ 'PHONE_NUMBER_PLACEHOLDER' | transloco }}"
-              name="phoneNumber"
-              [(ngModel)]="member.phoneNumber"
-              appPhone
-              #phoneNumber="ngModel"
-            />
-            @if (phoneNumber.control.hasError('phone')) {
-            <mat-error>{{ "PHONE_INVALID" | transloco }}</mat-error>
-            }
-          </mat-form-field>
+          <app-input
+            [control]="form.controls.phoneNumber"
+            label="PHONE_NUMBER"
+            placeholder="PHONE_NUMBER_PLACEHOLDER"
+          ></app-input>
         </div>
         <div class="col-12 col-md-6">
-          <label class="pb-2 d-block mat-title-small" for="status">{{
-            "STATUS" | transloco
-          }}</label>
-          <mat-form-field class="mb-2 col-12">
-            <mat-select
-              name="status"
-              [(ngModel)]="member.status"
-              required
-              #status="ngModel"
-            >
-              @for (s of statuses; track s) {
-              <mat-option [value]="s">{{
-                "STATUS_" + s | transloco
-              }}</mat-option>
-              }
-            </mat-select>
-            <mat-error>
-              <app-form-validation
-                [element]="status.control"
-              ></app-form-validation>
-            </mat-error>
-          </mat-form-field>
+          <app-select
+            [control]="form.controls.status"
+            label="STATUS"
+            [options]="statusOptions"
+          ></app-select>
         </div>
       </div>
       <button
         mat-flat-button
-        [disabled]="memberForm.invalid || loading()"
+        [disabled]="form.invalid || loading()"
         type="submit"
       >
         {{
