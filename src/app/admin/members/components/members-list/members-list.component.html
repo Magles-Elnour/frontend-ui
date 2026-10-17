@@ -55,6 +55,9 @@
           }
         </tbody>
       </table>
+      @if (!membersFilter.loading() && membersFilter.members().length === 0) {
+        <app-empty-result></app-empty-result>
+      }
     </div>
   </div>
 </section>
