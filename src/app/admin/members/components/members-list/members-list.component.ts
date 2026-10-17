@@ -5,14 +5,12 @@ import {
   viewChild,
 } from '@angular/core';
 import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
+import { LoadingShadeComponent } from '../../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
+import { TableActionsComponent } from '../../../../shared/ui-components/molecules/table-actions/table-actions.component';
 import { MatCardModule } from '@angular/material/card';
 import { MembersFilterComponent } from '../members-filter/members-filter.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
-import { MatIcon } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
 import { UrlsNames } from '../../../../models/shared-models';
 import { MembersService } from '../../services/members.service';
 import { Member, MemberStatus } from '../../models/member';
@@ -25,11 +23,9 @@ import { SnackbarService } from '../../../../services/snackbar.service';
     MatCardModule,
     MembersFilterComponent,
     MatPaginatorModule,
-    MatProgressSpinner,
     TranslocoPipe,
-    MatIcon,
-    MatButtonModule,
-    RouterLink,
+    LoadingShadeComponent,
+    TableActionsComponent,
   ],
   templateUrl: './members-list.component.html',
   styleUrl: './members-list.component.scss',
@@ -43,13 +39,9 @@ export class MembersListComponent {
   private snackbar = inject(SnackbarService);
   private transloco = inject(TranslocoService);
 
-  // Child filter component owns the list data + reload logic.
   private filter = viewChild.required(MembersFilterComponent);
 
-  /**
-   * Soft-deletes a member (backend sets status to REMOVED). After confirming, refreshes
-   * the list via the filter child so the member drops out of the default view.
-   */
+ 
   deleteMember(member: Member): void {
     const message = this.transloco.translate('MEMBER_DELETE_CONFIRM', {
       name: member.name,

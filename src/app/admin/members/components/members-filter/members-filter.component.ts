@@ -24,10 +24,10 @@ import {
   Subscription,
   switchMap,
 } from 'rxjs';
-import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { UrlsNames } from '../../../../models/shared-models';
 import { HttpParams } from '@angular/common/http';
+import { SearchInputComponent } from '../../../../shared/ui-components/molecules/search-input/search-input.component';
 
 @Component({
   selector: 'app-members-filter',
@@ -38,8 +38,8 @@ import { HttpParams } from '@angular/common/http';
     MatSelectModule,
     TranslocoPipe,
     MatIcon,
-    NgClass,
     RouterLink,
+    SearchInputComponent,
   ],
   templateUrl: './members-filter.component.html',
   styleUrl: './members-filter.component.scss',
@@ -64,13 +64,11 @@ export class MembersFilterComponent implements OnInit, OnDestroy {
     this.getMembers();
   }
 
-  /** Whether any filter is currently active (controls visibility of the clear button). */
   hasActiveFilters(): boolean {
     const { name, status } = this.filterForm.value;
     return !!name || !!status;
   }
 
-  /** Resets name + status so the list returns to showing everything. */
   clearFilters() {
     this.filterForm.reset({ name: null, status: null });
   }

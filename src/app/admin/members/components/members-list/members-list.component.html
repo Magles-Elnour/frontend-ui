@@ -3,11 +3,7 @@
   <div class="p-1">
     <app-members-filter #membersFilter></app-members-filter>
     <div class="position-relative">
-      @if(membersFilter.loading() ){
-      <div class="loading-shade">
-        <mat-spinner></mat-spinner>
-      </div>
-      }
+      <app-loading-shade [show]="membersFilter.loading()"></app-loading-shade>
       <mat-paginator
         [length]="membersFilter.totalCount()"
         [pageSize]="membersFilter.pageSize()"
@@ -42,31 +38,18 @@
               {{ "STATUS_" + member.status | transloco }}
             </td>
             <td class="last-row">
-              <button
-                mat-stroked-button
-                type="button"
-                [routerLink]="[
+              <app-table-actions
+                [editLink]="[
                   '/',
                   urlsNames.ADMIN,
                   urlsNames.MEMBERS,
                   urlsNames.MEMBERS_EDIT,
                   member.id
                 ]"
-                class="table-btn"
-              >
-                <mat-icon> border_color </mat-icon>
-              </button>
-              @if (member.status !== MemberStatus.REMOVED) {
-              <button
-                mat-stroked-button
-                type="button"
-                class="table-btn ms-2"
-                (click)="deleteMember(member)"
-                [attr.aria-label]="'MEMBER_DELETE' | transloco"
-              >
-                <mat-icon> delete </mat-icon>
-              </button>
-              }
+                [showDelete]="member.status !== MemberStatus.REMOVED"
+                deleteLabel="MEMBER_DELETE"
+                (deleteClick)="deleteMember(member)"
+              ></app-table-actions>
             </td>
           </tr>
           }
