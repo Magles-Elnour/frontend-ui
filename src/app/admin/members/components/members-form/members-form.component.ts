@@ -4,36 +4,22 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { finalize } from 'rxjs';
 
 import { UrlsNames } from '../../../../models/shared-models';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { InputComponent } from '../../../../shared/ui-components/atoms/input/input.component';
-import { LoadingShadeComponent } from '../../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
 import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
 import { SelectOption } from '../../../../shared/ui-components/atoms/select/select-option.model';
-import { SelectComponent } from '../../../../shared/ui-components/atoms/select/select.component';
+import { MemberFormComponent } from '../../../../shared/ui-components/templates/member-form/member-form.component';
 import { Member, MemberStatus } from '../../models/member';
 import { MembersService } from '../../services/members.service';
 import { validatePhone } from '../../validators/phone.validator';
 
 @Component({
   selector: 'app-members-form',
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    TranslocoPipe,
-    PageHeaderComponent,
-    InputComponent,
-    SelectComponent,
-    LoadingShadeComponent,
-  ],
+  imports: [PageHeaderComponent, MemberFormComponent],
   templateUrl: './members-form.component.html',
   styleUrl: './members-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +30,6 @@ export class MembersFormComponent {
   private router = inject(Router);
   private membersService = inject(MembersService);
 
-  /** The member loaded in edit mode (keeps id and startDate for the update request). */
   private loadedMember?: Member;
 
   readonly statusOptions: SelectOption[] = Object.values(MemberStatus).map(
