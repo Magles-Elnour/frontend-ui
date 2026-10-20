@@ -1,6 +1,6 @@
 import {
   ApplicationConfig,
-  provideZoneChangeDetection,
+  provideZonelessChangeDetection,
   isDevMode,
   LOCALE_ID,
   importProvidersFrom,
@@ -12,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { TranslocoHttpLoader } from './transloco-loader';
 import { provideTransloco } from '@jsverse/transloco';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
@@ -53,8 +53,9 @@ registerLocaleData(localeAr);
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideZonelessChangeDetection(),
     provideHttpClient(
+      withXhr(),
       withInterceptors([mockApiInterceptor, authInterceptor, httpRequestInterceptor]),
     ),
     // Restore the session from the refresh-token cookie BEFORE the router/guards run,

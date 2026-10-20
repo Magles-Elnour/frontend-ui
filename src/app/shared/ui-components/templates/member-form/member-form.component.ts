@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -36,4 +36,15 @@ export class MemberFormComponent<S extends string = string> {
   isEditMode = input(false);
   loading = input(false);
   submitted = output<void>();
+
+  private readonly changeDetector = inject(ChangeDetectorRef);
+
+  constructor() {
+    effect((onCleanup) => {
+      const subscription = this.form().events.subscribe(() =>
+        this.changeDetector.markForCheck(),
+      );
+      onCleanup(() => subscription.unsubscribe());
+    });
+  }
 }

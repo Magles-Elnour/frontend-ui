@@ -1,4 +1,4 @@
-import { Component, OnInit, input } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,13 +10,21 @@ import { TranslocoPipe } from '@jsverse/transloco';
   templateUrl: './form-validation.component.html',
   styleUrls: ['./form-validation.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [MatFormFieldModule, TranslocoPipe],
 })
-export class FormValidationComponent implements OnInit {
+export class FormValidationComponent {
   element = input.required<UntypedFormControl>();
 
   errorMessages: any = {};
-  constructor() {}
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
-  ngOnInit(): void {}
+  constructor() {
+    effect((onCleanup) => {
+      const subscription = this.element().events.subscribe(() =>
+        this.changeDetector.markForCheck(),
+      );
+      onCleanup(() => subscription.unsubscribe());
+    });
+  }
 }

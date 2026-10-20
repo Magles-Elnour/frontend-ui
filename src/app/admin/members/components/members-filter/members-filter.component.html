@@ -45,7 +45,7 @@
           @if(filterForm.get("status")?.value){
           {{ "SEARCH_STATUS" | transloco }}:
           <span class="primary-color">{{
-            "STATUS_" + filterForm.get("status")?.value | transloco
+            "STATUS_" + $safeNavigationMigration(filterForm.get("status")?.value) | transloco
           }}</span
           >}@else { {{ "SEARCH_STATUS" | transloco }}}
         </mat-select-trigger>

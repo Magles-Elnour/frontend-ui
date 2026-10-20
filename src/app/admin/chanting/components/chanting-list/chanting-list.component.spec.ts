@@ -14,7 +14,7 @@ describe('ChantingListComponent', () => {
 
     fixture = TestBed.createComponent(ChantingListComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
