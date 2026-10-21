@@ -1,31 +1,30 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  inject,
   output,
+  signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { form, FormField } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { debounceTime } from 'rxjs';
+import { debounceTime, skip } from 'rxjs';
 
 import { UrlsNames } from '../../../../models/shared-models';
 import { SearchInputComponent } from '../../../../shared/ui-components/molecules/search-input/search-input.component';
 import { MemberStatus } from '../../models/member';
 import { MembersFilterValue } from '../../models/members-filter-value';
 
-
 @Component({
   selector: 'app-members-filter',
   imports: [
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule,
+    FormField,
     MatSelectModule,
     TranslocoPipe,
     MatIcon,
@@ -37,33 +36,39 @@ import { MembersFilterValue } from '../../models/members-filter-value';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersFilterComponent {
-  private fb = inject(FormBuilder);
-
-  filterForm = this.fb.group({
-    name: new FormControl<string | null>(null),
-    status: new FormControl<MemberStatus | null>(null),
+  readonly filterModel = signal<{ name: string; status: MemberStatus | null }>({
+    name: '',
+    status: null,
   });
+  readonly filterForm = form(this.filterModel);
+
   statuses = Object.values(MemberStatus);
   urlsNames = UrlsNames;
 
   filterChange = output<MembersFilterValue>();
 
   constructor() {
-    this.filterForm.valueChanges
-      .pipe(debounceTime(500), takeUntilDestroyed())
-      .subscribe((value) => this.filterChange.emit(value));
+    toObservable(this.filterModel)
+      .pipe(skip(1), debounceTime(500), takeUntilDestroyed())
+      .subscribe(() => this.emitFilter());
   }
 
-  applyFilter() {
-    this.filterChange.emit(this.filterForm.value);
+  applyFilter(event: Event) {
+    event.preventDefault();
+    this.emitFilter();
   }
 
   hasActiveFilters(): boolean {
-    const { name, status } = this.filterForm.value;
+    const { name, status } = this.filterModel();
     return !!name || !!status;
   }
 
   clearFilters() {
-    this.filterForm.reset({ name: null, status: null });
+    this.filterModel.set({ name: '', status: null });
+  }
+
+  private emitFilter() {
+    const { name, status } = this.filterModel();
+    this.filterChange.emit({ name: name || null, status });
   }
 }
