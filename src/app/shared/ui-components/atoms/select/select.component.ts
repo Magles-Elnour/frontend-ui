@@ -1,31 +1,24 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FieldTree, FormField } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { FormValidationComponent } from '../form-validation/form-validation.component';
+import { fieldErrorKey } from '../form-validation/field-error-keys';
 import { SelectOption } from './select-option.model';
-
-let nextId = 0;
 
 @Component({
   selector: 'app-select',
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    TranslocoPipe,
-    FormValidationComponent,
-  ],
+  imports: [FormField, MatFormFieldModule, MatSelectModule, TranslocoPipe],
   templateUrl: './select.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'd-block' },
 })
 export class SelectComponent {
-  control = input.required<UntypedFormControl>();
+  field = input.required<FieldTree<string | null>>();
   options = input.required<SelectOption[]>();
   label = input<string>();
   placeholder = input<string>();
-  selectId = input(`app-select-${nextId++}`);
+
+  protected readonly errorKey = fieldErrorKey;
 }

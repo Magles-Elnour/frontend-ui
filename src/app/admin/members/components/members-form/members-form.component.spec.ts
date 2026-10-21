@@ -30,13 +30,13 @@ describe('MembersFormComponent', () => {
     const submit: HTMLButtonElement = fixture.nativeElement.querySelector('button[type="submit"]');
     expect(submit.disabled).toBeTrue();
 
-    await Promise.resolve().then(() => component.form.patchValue({ name: 'Updated member' }));
+    await Promise.resolve().then(() => component.model.update((m) => ({ ...m, name: 'Updated member' })));
     await fixture.whenStable();
 
     expect(fixture.nativeElement.querySelector('app-input input').value).toBe('Updated member');
     expect(submit.disabled).toBeFalse();
 
-    component.form.controls.name.setValue('');
+    component.model.update((m) => ({ ...m, name: '' }));
     await fixture.whenStable();
     expect(submit.disabled).toBeTrue();
   });

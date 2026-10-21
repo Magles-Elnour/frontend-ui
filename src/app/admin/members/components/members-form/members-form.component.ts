@@ -4,18 +4,23 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { form, required, validate } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { finalize } from 'rxjs';
 
 import { UrlsNames } from '../../../../models/shared-models';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
 import { SelectOption } from '../../../../shared/ui-components/atoms/select/select-option.model';
-import { MemberFormComponent } from '../../../../shared/ui-components/templates/member-form/member-form.component';
+import {
+  MemberFormComponent,
+  MemberFormModel,
+} from '../../../../shared/ui-components/templates/member-form/member-form.component';
 import { Member, MemberStatus } from '../../models/member';
 import { MembersService } from '../../services/members.service';
-import { validatePhone } from '../../validators/phone.validator';
+
+const DEFAULT_PHONE_REGION = 'EG';
 
 @Component({
   selector: 'app-members-form',
@@ -36,15 +41,28 @@ export class MembersFormComponent {
     (status) => ({ value: status, label: `STATUS_${status}` }),
   );
 
-  readonly form = new FormGroup({
-    name: new FormControl<string | null>(null, Validators.required),
-    phoneNumber: new FormControl<string | null>(null, (control) =>
-      validatePhone(control.value),
-    ),
-    status: new FormControl<MemberStatus | null>(
-      MemberStatus.ACTIVE,
-      Validators.required,
-    ),
+  readonly model = signal<MemberFormModel>({
+    name: '',
+    phoneNumber: '',
+    status: MemberStatus.ACTIVE,
+  });
+
+  readonly form = form(this.model, (path) => {
+    required(path.name);
+    required(path.status);
+    validate(path.phoneNumber, ({ value }) => {
+      const phone = value();
+      if (!phone.trim()) {
+        return undefined;
+      }
+      try {
+        return isValidPhoneNumber(phone, DEFAULT_PHONE_REGION)
+          ? undefined
+          : { kind: 'phone' };
+      } catch {
+        return { kind: 'phone' };
+      }
+    });
   });
 
   loading = signal(false);
@@ -60,27 +78,27 @@ export class MembersFormComponent {
         .pipe(finalize(() => setTimeout(() => this.loading.set(false), 300)))
         .subscribe((member) => {
           this.loadedMember = member;
-          this.form.patchValue({
-            name: member.name,
-            phoneNumber: member.phoneNumber,
-            status: member.status,
+          this.model.set({
+            name: member.name ?? '',
+            phoneNumber: member.phoneNumber ?? '',
+            status: member.status ?? null,
           });
         });
     }
   }
 
   addOrUpdate() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
       return;
     }
 
     this.loading.set(true);
-    const { name, phoneNumber, status } = this.form.getRawValue();
+    const { name, phoneNumber, status } = this.model();
     const request = {
-      name: name!,
-      phoneNumber,
-      status,
+      name,
+      phoneNumber: phoneNumber || null,
+      status: status as MemberStatus | null,
       startDate: this.loadedMember?.startDate,
     };
 

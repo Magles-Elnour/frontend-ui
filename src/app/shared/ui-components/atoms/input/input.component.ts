@@ -1,30 +1,23 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { FieldTree, FormField } from '@angular/forms/signals';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoPipe } from '@jsverse/transloco';
 
-import { FormValidationComponent } from '../form-validation/form-validation.component';
-
-let nextId = 0;
+import { fieldErrorKey } from '../form-validation/field-error-keys';
 
 @Component({
   selector: 'app-input',
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    TranslocoPipe,
-    FormValidationComponent,
-  ],
+  imports: [FormField, MatFormFieldModule, MatInputModule, TranslocoPipe],
   templateUrl: './input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'd-block' },
 })
 export class InputComponent {
-  control = input.required<UntypedFormControl>();
+  field = input.required<FieldTree<string>>();
   label = input<string>();
   placeholder = input<string>();
   type = input<'text' | 'email' | 'tel' | 'number' | 'password'>('text');
-  inputId = input(`app-input-${nextId++}`);
+
+  protected readonly errorKey = fieldErrorKey;
 }

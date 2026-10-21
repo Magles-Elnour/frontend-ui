@@ -1,19 +1,17 @@
-@if (label()) {
-  <label class="pb-2 d-block mat-title-small" [attr.for]="selectId()">{{
-    label()! | transloco
-  }}</label>
-}
 <mat-form-field class="mb-2 col-12">
+  @if (label()) {
+    <mat-label>{{ label()! | transloco }}</mat-label>
+  }
   <mat-select
-    [id]="selectId()"
-    [formControl]="control()"
+    [formField]="field()"
     [placeholder]="(placeholder() ?? '') | transloco"
   >
     @for (option of options(); track option.value) {
       <mat-option [value]="option.value">{{ option.label | transloco }}</mat-option>
     }
   </mat-select>
-  <mat-error>
-    <app-form-validation [element]="control()"></app-form-validation>
-  </mat-error>
+  @let error = field()().errors()[0];
+  @if (error) {
+    <mat-error>{{ errorKey(error.kind) | transloco }}</mat-error>
+  }
 </mat-form-field>

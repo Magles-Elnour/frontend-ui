@@ -1,5 +1,6 @@
+@let f = form();
 <section class="section-card p-3">
-  <form [formGroup]="form()" (ngSubmit)="submitted.emit()">
+  <form novalidate (submit)="onSubmit($event)">
     <div class="p-1 position-relative">
       <app-loading-shade [show]="loading()"></app-loading-shade>
       <div class="row">
@@ -10,31 +11,28 @@
             {{ "MEMBER_DETAILS" | transloco }}
           </h2>
         </div>
-        <div class="col-12 col-md-6">
-          <app-input
-            [control]="form().controls.name"
-            label="MEMBER_NAME"
-            placeholder="LMEMBER_NAME_PLACEHOLDER"
-          ></app-input>
-        </div>
-        <div class="col-12 col-md-6">
-          <app-input
-            [control]="form().controls.phoneNumber"
-            label="PHONE_NUMBER"
-            placeholder="PHONE_NUMBER_PLACEHOLDER"
-          ></app-input>
-        </div>
-        <div class="col-12 col-md-6">
-          <app-select
-            [control]="form().controls.status"
-            label="STATUS"
-            [options]="statusOptions()"
-          ></app-select>
-        </div>
+        <app-input
+          class="col-12 col-md-6"
+          [field]="f.name"
+          label="MEMBER_NAME"
+          placeholder="LMEMBER_NAME_PLACEHOLDER"
+        ></app-input>
+        <app-input
+          class="col-12 col-md-6"
+          [field]="f.phoneNumber"
+          label="PHONE_NUMBER"
+          placeholder="PHONE_NUMBER_PLACEHOLDER"
+        ></app-input>
+        <app-select
+          class="col-12 col-md-6"
+          [field]="f.status"
+          label="STATUS"
+          [options]="statusOptions()"
+        ></app-select>
       </div>
       <button
         mat-flat-button
-        [disabled]="form().invalid || loading()"
+        [disabled]="f().invalid() || loading()"
         type="submit"
       >
         {{

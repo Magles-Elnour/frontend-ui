@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -9,17 +9,15 @@ import { LoadingShadeComponent } from '../../atoms/loading-shade/loading-shade.c
 import { SelectOption } from '../../atoms/select/select-option.model';
 import { SelectComponent } from '../../atoms/select/select.component';
 
-export interface MemberFormControls<S extends string = string> {
-  name: FormControl<string | null>;
-  phoneNumber: FormControl<string | null>;
-  status: FormControl<S | null>;
+export interface MemberFormModel {
+  name: string;
+  phoneNumber: string;
+  status: string | null;
 }
-
 
 @Component({
   selector: 'app-member-form',
   imports: [
-    ReactiveFormsModule,
     MatButtonModule,
     MatIcon,
     TranslocoPipe,
@@ -30,21 +28,15 @@ export interface MemberFormControls<S extends string = string> {
   templateUrl: './member-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MemberFormComponent<S extends string = string> {
-  form = input.required<FormGroup<MemberFormControls<S>>>();
+export class MemberFormComponent {
+  form = input.required<FieldTree<MemberFormModel>>();
   statusOptions = input.required<SelectOption[]>();
   isEditMode = input(false);
   loading = input(false);
   submitted = output<void>();
 
-  private readonly changeDetector = inject(ChangeDetectorRef);
-
-  constructor() {
-    effect((onCleanup) => {
-      const subscription = this.form().events.subscribe(() =>
-        this.changeDetector.markForCheck(),
-      );
-      onCleanup(() => subscription.unsubscribe());
-    });
+  onSubmit(event: Event) {
+    event.preventDefault();
+    this.submitted.emit();
   }
 }
