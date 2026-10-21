@@ -1,14 +1,9 @@
-<form
-  class="d-flex flex-wrap"
-  [formGroup]="filterForm"
-  (ngSubmit)="applyFilter()"
->
+<form class="d-flex flex-wrap" novalidate (submit)="applyFilter($event)">
   <div class="col-12 d-flex flex-wrap">
-    <mat-form-field class="col" appearance="outline" style="max-width: 486px">
-      <mat-label>{{ "SEARCH_NAME" | transloco }}</mat-label>
-      <input matInput id="name" formControlName="name" />
-      <mat-icon matPrefix> search </mat-icon>
-    </mat-form-field>
+    <app-search-input
+      [field]="filterForm.name"
+      label="SEARCH_NAME"
+    ></app-search-input>
     <div class="col px-0 d-flex">
       <button
         class="me-auto ms-2"
@@ -36,19 +31,19 @@
   <div class="d-flex">
     <mat-form-field
       class="filter-select flex-shrink-0"
-      [ngClass]="{ active: filterForm.get('status')?.value }"
+      [class.active]="!!filterModel().status"
     >
       <mat-select
         placeholder="{{ 'SEARCH_STATUS' | transloco }}"
-        formControlName="status"
+        [formField]="filterForm.status"
       >
         <mat-select-trigger>
-          @if(filterForm.get("status")?.value){
+          @if (filterModel().status; as status) {
           {{ "SEARCH_STATUS" | transloco }}:
           <span class="primary-color">{{
-            "STATUS_" + filterForm.get("status")?.value | transloco
+            "STATUS_" + status | transloco
           }}</span
-          >}@else { {{ "SEARCH_STATUS" | transloco }}}
+          >} @else { {{ "SEARCH_STATUS" | transloco }} }
         </mat-select-trigger>
         <mat-option [value]="null">{{ "STATUS_ALL" | transloco }}</mat-option>
         @for (status of statuses; track status) {

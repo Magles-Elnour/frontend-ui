@@ -1,0 +1,15 @@
+<mat-form-field class="mb-2 col-12">
+  @if (label()) {
+    <mat-label>{{ label()! | transloco }}</mat-label>
+  }
+  <input
+    matInput
+    [type]="type()"
+    [formField]="field()"
+    [placeholder]="(placeholder() ?? '') | transloco"
+  />
+  @let error = field()().errors()[0];
+  @if (error) {
+    <mat-error>{{ errorKey(error.kind) | transloco }}</mat-error>
+  }
+</mat-form-field>

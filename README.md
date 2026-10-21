@@ -1,16 +1,37 @@
 # MaglesElnour
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.4.
+This project uses Angular and Angular CLI 22.2.3.
+
+## Setup
+
+Use Node.js 22.22.3 or a compatible newer release listed in the
+[Angular version compatibility table](https://angular.dev/reference/versions).
+With nvm installed:
+
+```bash
+nvm install
+nvm use
+npm ci
+```
+
+The npm scripts automatically use Angular's JavaScript Sass compiler on macOS
+versions older than 14, where the native Sass runtime cannot start.
+TypeScript stays on 6.0.x for Angular 22 compatibility.
+
+The app and tests run without Zone.js using `provideZonelessChangeDetection()`.
+Use signals for asynchronous UI state. Shared reactive form components subscribe
+to control events to notify Angular when validation or form state changes.
+Tests use `fixture.whenStable()` for rendering and Jasmine's clock for timer tests.
 
 ## Development server
 
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Once the server is running, open your browser and navigate to `http://localhost:4002/`. The application will automatically reload whenever you modify any of the source files.
 
 Temporary mock APIs and login are enabled for development builds while backend CORS is being
 fixed. Enter any non-empty username and password to sign in as a local admin.
@@ -33,13 +54,13 @@ local storage and reload.
 Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
 ```bash
-ng generate component component-name
+npm run ng -- generate component component-name
 ```
 
 For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
 ```bash
-ng generate --help
+npm run ng -- generate --help
 ```
 
 ## Building
@@ -47,7 +68,7 @@ ng generate --help
 To build the project run:
 
 ```bash
-ng build
+npm run build
 ```
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
@@ -57,7 +78,13 @@ This will compile your project and store the build artifacts in the `dist/` dire
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
 ```bash
-ng test
+npm test
+```
+
+For a single headless run (requires Google Chrome):
+
+```bash
+npm run test:ci
 ```
 
 ## Running end-to-end tests

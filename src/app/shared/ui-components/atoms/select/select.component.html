@@ -1,0 +1,17 @@
+<mat-form-field class="mb-2 col-12">
+  @if (label()) {
+    <mat-label>{{ label()! | transloco }}</mat-label>
+  }
+  <mat-select
+    [formField]="field()"
+    [placeholder]="(placeholder() ?? '') | transloco"
+  >
+    @for (option of options(); track option.value) {
+      <mat-option [value]="option.value">{{ option.label | transloco }}</mat-option>
+    }
+  </mat-select>
+  @let error = field()().errors()[0];
+  @if (error) {
+    <mat-error>{{ errorKey(error.kind) | transloco }}</mat-error>
+  }
+</mat-form-field>

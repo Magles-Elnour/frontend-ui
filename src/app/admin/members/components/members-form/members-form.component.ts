@@ -4,39 +4,27 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { PageHeaderComponent } from '../../../../core/components/page-header/page-header.component';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { form, required, validate } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Member, MemberStatus } from '../../models/member';
-import { MembersService } from '../../services/members.service';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { finalize } from 'rxjs';
+
 import { UrlsNames } from '../../../../models/shared-models';
 import { SnackbarService } from '../../../../services/snackbar.service';
-import { TranslocoPipe } from '@jsverse/transloco';
-import { FormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
-import { FormValidationComponent } from '../../../../core/components/form-validation/form-validation.component';
-import { MatButtonModule } from '@angular/material/button';
-import { PhoneValidatorDirective } from '../../validators/phone.validator';
+import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
+import { SelectOption } from '../../../../shared/ui-components/atoms/select/select-option.model';
+import {
+  MemberFormComponent,
+  MemberFormModel,
+} from '../../../../shared/ui-components/templates/member-form/member-form.component';
+import { Member, MemberStatus } from '../../models/member';
+import { MembersService } from '../../services/members.service';
+
+const DEFAULT_PHONE_REGION = 'EG';
 
 @Component({
   selector: 'app-members-form',
-  imports: [
-    PageHeaderComponent,
-    MatProgressSpinner,
-    TranslocoPipe,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatSelectModule,
-    FormValidationComponent,
-    MatButtonModule,
-    PhoneValidatorDirective,
-  ],
+  imports: [PageHeaderComponent, MemberFormComponent],
   templateUrl: './members-form.component.html',
   styleUrl: './members-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,8 +34,37 @@ export class MembersFormComponent {
   private snackbarService = inject(SnackbarService);
   private router = inject(Router);
   private membersService = inject(MembersService);
-  member: Member = { status: MemberStatus.ACTIVE };
-  statuses = Object.values(MemberStatus);
+
+  private loadedMember?: Member;
+
+  readonly statusOptions: SelectOption[] = Object.values(MemberStatus).map(
+    (status) => ({ value: status, label: `STATUS_${status}` }),
+  );
+
+  readonly model = signal<MemberFormModel>({
+    name: '',
+    phoneNumber: '',
+    status: MemberStatus.ACTIVE,
+  });
+
+  readonly form = form(this.model, (path) => {
+    required(path.name);
+    required(path.status);
+    validate(path.phoneNumber, ({ value }) => {
+      const phone = value();
+      if (!phone.trim()) {
+        return undefined;
+      }
+      try {
+        return isValidPhoneNumber(phone, DEFAULT_PHONE_REGION)
+          ? undefined
+          : { kind: 'phone' };
+      } catch {
+        return { kind: 'phone' };
+      }
+    });
+  });
+
   loading = signal(false);
   isEditMode = false;
 
@@ -60,23 +77,35 @@ export class MembersFormComponent {
         .getById(Number(memberId))
         .pipe(finalize(() => setTimeout(() => this.loading.set(false), 300)))
         .subscribe((member) => {
-          this.member = member;
+          this.loadedMember = member;
+          this.model.set({
+            name: member.name ?? '',
+            phoneNumber: member.phoneNumber ?? '',
+            status: member.status ?? null,
+          });
         });
     }
   }
 
   addOrUpdate() {
+    if (this.form().invalid()) {
+      this.form().markAsTouched();
+      return;
+    }
+
     this.loading.set(true);
+    const { name, phoneNumber, status } = this.model();
     const request = {
-      name: this.member.name!,
-      phoneNumber: this.member.phoneNumber,
-      status: this.member.status,
-      startDate: this.member.startDate,
+      name,
+      phoneNumber: phoneNumber || null,
+      status: status as MemberStatus | null,
+      startDate: this.loadedMember?.startDate,
     };
 
+    const id = this.loadedMember?.id;
     const operation =
-      this.isEditMode && this.member.id
-        ? this.membersService.update(this.member.id, request)
+      this.isEditMode && id
+        ? this.membersService.update(id, request)
         : this.membersService.create(request);
 
     operation
@@ -93,7 +122,6 @@ export class MembersFormComponent {
             UrlsNames.MEMBERS_LIST,
           ]);
         },
-        // Surface failures (e.g. validation 400) instead of silently doing nothing.
         error: () =>
           this.snackbarService.error(
             this.isEditMode ? 'MEMBERS_UPDATE_ERROR' : 'MEMBERS_ADD_ERROR',

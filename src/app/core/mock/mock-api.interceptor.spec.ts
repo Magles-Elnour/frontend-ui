@@ -1,6 +1,6 @@
-import { HttpClient, HttpParams, HttpRequest, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpRequest, provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { Member, MemberResponse, MemberStatus } from '../../admin/members/models/member';
 import { MembersService } from '../../admin/members/services/members.service';
@@ -16,11 +16,12 @@ describe('mockApiInterceptor', () => {
   let members: MembersService;
 
   beforeEach(() => {
+    jasmine.clock().install();
     localStorage.removeItem('mock-api-members-v1');
     sessionStorage.removeItem('mock-auth-username');
     TestBed.configureTestingModule({
       providers: [
-        provideHttpClient(withInterceptors([
+        provideHttpClient(withXhr(), withInterceptors([
           mockApiInterceptor, authInterceptor, httpRequestInterceptor,
         ])),
         provideHttpClientTesting(),
@@ -31,6 +32,7 @@ describe('mockApiInterceptor', () => {
   });
 
   afterEach(() => {
+    jasmine.clock().uninstall();
     http.verify();
     localStorage.removeItem('mock-api-members-v1');
     sessionStorage.removeItem('mock-auth-username');
@@ -43,12 +45,12 @@ describe('mockApiInterceptor', () => {
     members = TestBed.inject(MembersService);
   }
 
-  it('returns paginated sample members without reaching the backend', fakeAsync(() => {
+  it('returns paginated sample members without reaching the backend', () => {
     setup();
     let response!: MemberResponse;
     members.get(new HttpParams().set('page', 1).set('size', 3))
       .subscribe((value) => response = value);
-    tick(150);
+    jasmine.clock().tick(150);
 
     expect(response.number).toBe(1);
     expect(response.size).toBe(3);
@@ -56,19 +58,19 @@ describe('mockApiInterceptor', () => {
     expect(response.totalPages).toBe(3);
     expect(response.content.map((member) => member.id)).toEqual([4, 5, 6]);
     http.expectNone(() => true);
-  }));
+  });
 
-  it('creates the supplied member, retrieves it, and persists it after reload', fakeAsync(() => {
+  it('creates the supplied member, retrieves it, and persists it after reload', () => {
     setup();
     let created!: Member;
     const body = { name: 'erte', phoneNumber: '01060604390', status: MemberStatus.ACTIVE };
     members.create(body).subscribe((value) => created = value);
-    tick(150);
+    jasmine.clock().tick(150);
     expect(created).toEqual({ id: 9, ...body, startDate: null });
 
     let fetched!: Member;
     members.getById(created.id!).subscribe((value) => fetched = value);
-    tick(150);
+    jasmine.clock().tick(150);
     expect(fetched).toEqual(created);
 
     const reloaded = new MockApiService();
@@ -76,53 +78,53 @@ describe('mockApiInterceptor', () => {
     expect(reloaded.handle(new HttpRequest('GET', url), new URL(url, 'http://localhost')).body)
       .toEqual(created);
     http.expectNone(() => true);
-  }));
+  });
 
-  it('updates members and applies combined name and status filters', fakeAsync(() => {
+  it('updates members and applies combined name and status filters', () => {
     setup();
     members.update(1, { name: 'Updated Member', status: MemberStatus.SUSPENDED }).subscribe();
-    tick(150);
+    jasmine.clock().tick(150);
     let response!: MemberResponse;
     members.get(new HttpParams().set('name', 'updated').set('status', MemberStatus.SUSPENDED))
       .subscribe((value) => response = value);
-    tick(150);
+    jasmine.clock().tick(150);
 
     expect(response.totalElements).toBe(1);
     expect(response.content[0].id).toBe(1);
     expect(response.content[0].name).toBe('Updated Member');
     http.expectNone(() => true);
-  }));
+  });
 
-  it('soft deletes members and includes them only with the removed filter', fakeAsync(() => {
+  it('soft deletes members and includes them only with the removed filter', () => {
     setup();
     members.delete(1).subscribe();
-    tick(150);
+    jasmine.clock().tick(150);
     let response!: MemberResponse;
     members.get().subscribe((value) => response = value);
-    tick(150);
+    jasmine.clock().tick(150);
     expect(response.totalElements).toBe(7);
     expect(response.content.some((member) => member.id === 1)).toBeFalse();
 
     members.get(new HttpParams().set('status', MemberStatus.REMOVED))
       .subscribe((value) => response = value);
-    tick(150);
+    jasmine.clock().tick(150);
     expect(response.totalElements).toBe(1);
     expect(response.content[0].id).toBe(1);
     expect(response.content[0].status).toBe(MemberStatus.REMOVED);
     http.expectNone(() => true);
-  }));
+  });
 
-  it('handles absolute API URLs and query strings locally', fakeAsync(() => {
+  it('handles absolute API URLs and query strings locally', () => {
     setup();
     let response!: MemberResponse;
     client.get<MemberResponse>('https://64-226-74-211.nip.io/api/members?page=0&size=2')
       .subscribe((value) => response = value);
-    tick(150);
+    jasmine.clock().tick(150);
 
     expect(response.content.length).toBe(2);
     expect(response.totalElements).toBe(8);
     http.expectNone(() => true);
-  }));
+  });
 
   it('returns local errors for missing members, invalid input, and unknown APIs', () => {
     setup();
@@ -136,31 +138,31 @@ describe('mockApiInterceptor', () => {
     http.expectNone(() => true);
   });
 
-  it('returns mock responses for every current auth API', fakeAsync(() => {
+  it('returns mock responses for every current auth API', () => {
     setup();
     let signIn!: { accessToken: string };
     client.post<{ accessToken: string }>('/api/auth/sign-in', { username: 'tester', password: 'any' })
       .subscribe((value) => signIn = value);
-    tick(150);
+    jasmine.clock().tick(150);
     expect(signIn.accessToken).toBeTruthy();
 
     let profile!: { username: string; role: string };
     client.get<{ username: string; role: string }>('/api/users/me')
       .subscribe((value) => profile = value);
-    tick(150);
+    jasmine.clock().tick(150);
     expect(profile.username).toBe('tester');
     expect(profile.role).toBe('ADMIN');
 
     let refreshed!: { accessToken: string };
     client.post<{ accessToken: string }>('/api/auth/refresh', {})
       .subscribe((value) => refreshed = value);
-    tick(150);
+    jasmine.clock().tick(150);
     expect(refreshed.accessToken).toBe(signIn.accessToken);
     client.post('/api/auth/sign-out', {}).subscribe();
-    tick(150);
+    jasmine.clock().tick(150);
     expect(sessionStorage.getItem('mock-auth-username')).toBeNull();
     http.expectNone(() => true);
-  }));
+  });
 
   it('lets translation assets load normally', () => {
     setup();
@@ -181,14 +183,14 @@ describe('mockApiInterceptor', () => {
     expect(localStorage.getItem('mock-api-members-v1')).toBeNull();
   });
 
-  it('recovers from invalid stored mock data', fakeAsync(() => {
+  it('recovers from invalid stored mock data', () => {
     setup();
     localStorage.setItem('mock-api-members-v1', 'invalid json');
     let response!: MemberResponse;
     members.get().subscribe((value) => response = value);
-    tick(150);
+    jasmine.clock().tick(150);
 
     expect(response.totalElements).toBe(8);
     http.expectNone(() => true);
-  }));
+  });
 });

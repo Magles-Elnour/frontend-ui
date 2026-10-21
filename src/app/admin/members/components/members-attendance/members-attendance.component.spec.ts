@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { getTranslocoTestingModule } from '../../../../testing/transloco-testing';
 
 import { MembersAttendanceComponent } from './members-attendance.component';
 
@@ -8,13 +9,13 @@ describe('MembersAttendanceComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MembersAttendanceComponent]
+      imports: [MembersAttendanceComponent, getTranslocoTestingModule()]
     })
     .compileComponents();
 
     fixture = TestBed.createComponent(MembersAttendanceComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {
