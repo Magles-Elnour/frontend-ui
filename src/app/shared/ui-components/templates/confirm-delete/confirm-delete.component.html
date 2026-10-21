@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>
   {{ data.title ?? "CONFIRM_DELETE_TITLE" | transloco }}
 </h2>
-<mat-dialog-content>{{ data.message }}</mat-dialog-content>
+<mat-dialog-content>{{ data.message | transloco: data.params }}</mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button type="button" [mat-dialog-close]="false">
     {{ "CANCEL" | transloco }}

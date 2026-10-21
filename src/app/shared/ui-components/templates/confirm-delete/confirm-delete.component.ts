@@ -5,9 +5,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 export interface ConfirmDeleteData {
   message: string;
+  params?: Record<string, unknown>;
   title?: string;
 }
-
 
 @Component({
   selector: 'app-confirm-delete',

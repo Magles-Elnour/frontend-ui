@@ -6,9 +6,12 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpParams } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { RouterLink } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   catchError,
   filter,
@@ -23,7 +26,6 @@ import { UrlsNames } from '../../../../models/shared-models';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { LoadingShadeComponent } from '../../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
 import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
-import { TableActionsComponent } from '../../../../shared/ui-components/molecules/table-actions/table-actions.component';
 import {
   ConfirmDeleteComponent,
   ConfirmDeleteData,
@@ -42,7 +44,9 @@ import { MembersFilterComponent } from '../members-filter/members-filter.compone
     MatPaginatorModule,
     TranslocoPipe,
     LoadingShadeComponent,
-    TableActionsComponent,
+    MatButtonModule,
+    MatIcon,
+    RouterLink,
     EmptyResultComponent,
   ],
   templateUrl: './members-list.component.html',
@@ -55,7 +59,6 @@ export class MembersListComponent {
 
   private membersService = inject(MembersService);
   private snackbar = inject(SnackbarService);
-  private transloco = inject(TranslocoService);
   private dialog = inject(MatDialog);
 
   members = signal<Member[]>([]);
@@ -119,19 +122,20 @@ export class MembersListComponent {
     return params;
   }
 
-  
   deleteMember(member: Member): void {
     const id = member.id;
     if (!id) {
       return;
     }
-    const message = this.transloco.translate('MEMBER_DELETE_CONFIRM', {
-      name: member.name,
-    });
     this.dialog
       .open<ConfirmDeleteComponent, ConfirmDeleteData, boolean>(
         ConfirmDeleteComponent,
-        { data: { message } },
+        {
+          data: {
+            message: 'MEMBER_DELETE_CONFIRM',
+            params: { name: member.name },
+          },
+        },
       )
       .afterClosed()
       .pipe(

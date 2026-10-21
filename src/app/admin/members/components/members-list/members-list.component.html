@@ -40,18 +40,31 @@
               {{ "STATUS_" + member.status | transloco }}
             </td>
             <td class="last-row">
-              <app-table-actions
-                [editLink]="[
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn"
+                [routerLink]="[
                   '/',
                   urlsNames.ADMIN,
                   urlsNames.MEMBERS,
                   urlsNames.MEMBERS_EDIT,
                   member.id
                 ]"
-                [showDelete]="member.status !== MemberStatus.REMOVED"
-                deleteLabel="MEMBER_DELETE"
-                (deleteClick)="deleteMember(member)"
-              ></app-table-actions>
+              >
+                <mat-icon> border_color </mat-icon>
+              </button>
+              @if (member.status !== MemberStatus.REMOVED) {
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn ms-2"
+                (click)="deleteMember(member)"
+                [attr.aria-label]="'MEMBER_DELETE' | transloco"
+              >
+                <mat-icon> delete </mat-icon>
+              </button>
+              }
             </td>
           </tr>
           }
