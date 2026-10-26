@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { getTranslocoTestingModule } from '../../../testing/transloco-testing';
 
 import { LoginComponent } from './login.component';
@@ -81,5 +82,23 @@ describe('LoginComponent', () => {
     await fixture.whenStable();
     expect(submitButton().disabled).toBeTrue();
     expect(fixture.nativeElement.querySelector('.loading-shade')).toBeTruthy();
+  });
+
+  it('does not call signIn when the form is invalid', () => {
+    const signIn = spyOn(component.userService, 'signIn').and.returnValue(of(void 0));
+    component.credentials.set({ username: '   ', password: 'secret' });
+
+    component.login();
+
+    expect(signIn).not.toHaveBeenCalled();
+  });
+
+  it('calls signIn with a trimmed username and the untouched password', () => {
+    const signIn = spyOn(component.userService, 'signIn').and.returnValue(of(void 0));
+    component.credentials.set({ username: '  user  ', password: ' secret ' });
+
+    component.login();
+
+    expect(signIn).toHaveBeenCalledOnceWith('user', ' secret ');
   });
 });
