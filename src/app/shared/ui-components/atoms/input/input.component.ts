@@ -18,6 +18,24 @@ export class InputComponent {
   label = input<string>();
   placeholder = input<string>();
   type = input<'text' | 'email' | 'tel' | 'number' | 'password'>('text');
+  maxLength = input<number>();
 
   protected readonly errorKey = fieldErrorKey;
+
+  protected limitLength(event: Event): void {
+    const inputElement = event.target;
+    const maxLength = this.maxLength();
+
+    if (
+      !(inputElement instanceof HTMLInputElement) ||
+      maxLength === undefined ||
+      inputElement.value.length <= maxLength
+    ) {
+      return;
+    }
+
+    const value = inputElement.value.slice(0, maxLength);
+    inputElement.value = value;
+    this.field()().value.set(value);
+  }
 }

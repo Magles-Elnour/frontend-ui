@@ -7,6 +7,7 @@
     [type]="type()"
     [formField]="field()"
     [placeholder]="(placeholder() ?? '') | transloco"
+    (input)="limitLength($event)"
   />
   @let error = field()().errors()[0];
   @if (error) {
