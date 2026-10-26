@@ -57,6 +57,11 @@ export class MembersListComponent {
   urlsNames = UrlsNames;
   readonly MemberStatus = MemberStatus;
 
+  readonly breadcrumbLinks = [
+    ['/', UrlsNames.ADMIN, UrlsNames.MEMBERS],
+    ['/', UrlsNames.ADMIN, UrlsNames.MEMBERS, UrlsNames.MEMBERS_LIST],
+  ];
+
   private membersService = inject(MembersService);
   private snackbar = inject(SnackbarService);
   private dialog = inject(MatDialog);

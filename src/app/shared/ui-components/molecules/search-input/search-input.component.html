@@ -1,5 +1,5 @@
-<mat-form-field class="w-100" appearance="outline">
+<mat-form-field class="w-100" appearance="outline" floatLabel="always">
   <mat-label>{{ label() | transloco }}</mat-label>
-  <input matInput [formField]="field()" />
+  <input matInput [formField]="field()" [placeholder]="label() | transloco" />
   <mat-icon matPrefix> search </mat-icon>
 </mat-form-field>

@@ -1,4 +1,7 @@
-<app-page-header [header]="['MEMBERS', 'MEMBERS_LIST']"></app-page-header>
+<app-page-header
+  [header]="['MEMBERS', 'MEMBERS_LIST']"
+  [links]="breadcrumbLinks"
+></app-page-header>
 <section class="section-card p-3">
   <div class="p-1">
     <app-members-filter
@@ -71,7 +74,7 @@
         </tbody>
       </table>
       @if (!loading() && members().length === 0) {
-        <app-empty-result></app-empty-result>
+        <app-empty-result message="NO_MEMBERS_MATCH"></app-empty-result>
       }
     </div>
   </div>
