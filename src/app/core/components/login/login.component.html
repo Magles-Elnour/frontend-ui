@@ -1,69 +1,50 @@
 <section class="d-flex vh-100">
-  @if(userService.isLoading() ){
-  <div class="loading-shade">
-    <mat-spinner></mat-spinner>
-  </div>
-  }
+  <app-loading-shade [show]="userService.isLoading()"></app-loading-shade>
   <div class="h-100 login-section d-flex px-5">
-    <form
-      class="row py-2 my-auto"
-      #loginForm="ngForm"
-      (ngSubmit)="login()"
-    >
+    <form class="row py-2 my-auto" novalidate (submit)="login($event)">
       <h1 class="mat-display-small primary-color mb-5">
         {{ "LOGIN_WELCOME" | transloco }}
       </h1>
-      <label class="pb-2 mat-title-small" for="username">{{
-        "LOGIN_USERNAME" | transloco
-      }}</label>
-      <mat-form-field class="mb-2 col-12">
+      <mat-form-field class="mb-2 col-12" floatLabel="always">
+        <mat-label>{{ "LOGIN_USERNAME" | transloco }}</mat-label>
         <input
           matInput
-          placeholder="{{ 'LOGIN_USERNAME_PLACEHOLDER' | transloco }}"
-          required
-          name="username"
+          [formField]="loginForm.username"
+          [placeholder]="'LOGIN_USERNAME_PLACEHOLDER' | transloco"
           autocomplete="username"
-          [(ngModel)]="credentials.username"
-          #username="ngModel"
         />
         <mat-icon matPrefix> person </mat-icon>
-        <mat-error>
-          <app-form-validation [element]="username.control"></app-form-validation>
-        </mat-error>
+        @let usernameError = loginForm.username().errors()[0];
+        @if (usernameError) {
+          <mat-error>{{ errorKey(usernameError.kind) | transloco }}</mat-error>
+        }
       </mat-form-field>
-      <mat-label class="pb-2 mat-title-small" for="password">{{
-        "LOGIN_PASSWORD" | transloco
-      }}</mat-label>
-      <mat-form-field class="col-12">
+      <mat-form-field class="col-12" floatLabel="always">
+        <mat-label>{{ "LOGIN_PASSWORD" | transloco }}</mat-label>
         <input
           matInput
-          placeholder="{{ 'LOGIN_PASSWORD_PLACEHOLDER' | transloco }}"
-          [type]="hide ? 'password' : 'text'"
-          name="password"
-          required
+          [formField]="loginForm.password"
+          [placeholder]="'LOGIN_PASSWORD_PLACEHOLDER' | transloco"
+          [type]="hide() ? 'password' : 'text'"
           autocomplete="current-password"
-          [(ngModel)]="credentials.password"
-          #password="ngModel"
         />
         <button
           mat-icon-button
-          matPrefix
+          matSuffix
           class="f-18"
           type="button"
-          (click)="hide = !hide"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide"
+          (click)="hide.set(!hide())"
+          [attr.aria-label]="(hide() ? 'SHOW_PASSWORD' : 'HIDE_PASSWORD') | transloco"
+          [attr.aria-pressed]="!hide()"
         >
           <mat-icon>
-            {{ hide ? "visibility_off" : "visibility" }}
+            {{ hide() ? "visibility_off" : "visibility" }}
           </mat-icon>
         </button>
-
-        <mat-error>
-          <app-form-validation
-            [element]="password.control"
-          ></app-form-validation>
-        </mat-error>
+        @let passwordError = loginForm.password().errors()[0];
+        @if (passwordError) {
+          <mat-error>{{ errorKey(passwordError.kind) | transloco }}</mat-error>
+        }
       </mat-form-field>
 
       <div class="d-flex mt-4 justify-content-center">
@@ -72,7 +53,7 @@
           mat-flat-button
           id="login-submit-btn"
           class="w-100"
-          [disabled]="loginForm.invalid"
+          [disabled]="loginForm().invalid() || userService.isLoading()"
         >
           {{ "LOGIN_BTN" | transloco }}
         </button>
