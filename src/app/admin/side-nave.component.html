@@ -79,9 +79,7 @@
                 >
                   <p
                     class="m-0 mat-label-large overflow-hidden mw-100 text-truncate"
-                    [@titleAnimation]="
-                      screen() === ScreenState.mediumClosed ? 'closed' : 'open'
-                    "
+                    [class.d-none]="screen() === ScreenState.mediumClosed"
                   >
                     {{ nav.title | transloco }}
                   </p>
@@ -116,9 +114,7 @@
             </mat-icon>
             <p
               class="m-0 mat-label-large fw-700 on-surface-variant-color overflow-hidden mw-100 text-truncate"
-              [@titleAnimation]="
-                screen() === ScreenState.mediumClosed ? 'closed' : 'open'
-              "
+              [class.d-none]="screen() === ScreenState.mediumClosed"
             >
               {{ "LOGOUT_BTN" | transloco }}
             </p>

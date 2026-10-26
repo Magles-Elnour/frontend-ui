@@ -14,7 +14,7 @@ describe('ChantingAttendanceComponent', () => {
 
     fixture = TestBed.createComponent(ChantingAttendanceComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

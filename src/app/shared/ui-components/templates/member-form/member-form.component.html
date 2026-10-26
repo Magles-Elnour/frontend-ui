@@ -1,0 +1,47 @@
+@let f = form();
+<section class="section-card p-3">
+  <form novalidate (submit)="onSubmit($event)">
+    <div class="p-1 position-relative">
+      <app-loading-shade [show]="loading()"></app-loading-shade>
+      <div class="row">
+        <div
+          class="col-12 mb-3 d-flex flex-wrap justify-content-between align-items-center"
+        >
+          <h2 class="mat-title-large m-0">
+            {{ "MEMBER_DETAILS" | transloco }}
+          </h2>
+        </div>
+        <app-input
+          class="col-12 col-md-6"
+          [field]="f.name"
+          label="MEMBER_NAME"
+          placeholder="LMEMBER_NAME_PLACEHOLDER"
+        ></app-input>
+        <app-input
+          class="col-12 col-md-6"
+          [field]="f.phoneNumber"
+          label="PHONE_NUMBER"
+          placeholder="PHONE_NUMBER_PLACEHOLDER"
+        ></app-input>
+        <app-select
+          class="col-12 col-md-6"
+          [field]="f.status"
+          label="STATUS"
+          [options]="statusOptions()"
+        ></app-select>
+      </div>
+      <button
+        mat-flat-button
+        [disabled]="f().invalid() || loading()"
+        type="submit"
+      >
+        {{
+          isEditMode()
+            ? ("UPDATE_MEMBER_BTN" | transloco)
+            : ("ADD_MEMBER_BTN" | transloco)
+        }}
+        <mat-icon> save </mat-icon>
+      </button>
+    </div>
+  </form>
+</section>

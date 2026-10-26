@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoModule } from '@jsverse/transloco';
 import { UserService } from '../../../services/user.service';
-import { FormValidationComponent } from '../form-validation/form-validation.component';
+import { FormValidationComponent } from '../../../shared/ui-components/atoms/form-validation/form-validation.component';
 import { SnackbarService } from '../../../services/snackbar.service';
 
 @Component({
