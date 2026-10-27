@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 import { form, required, validate } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 import { finalize } from 'rxjs';
 
 import { UrlsNames } from '../../../../models/shared-models';
@@ -19,8 +18,6 @@ import {
 } from '../../../../shared/ui-components/templates/member-form/member-form.component';
 import { Member, MemberStatus } from '../../models/member';
 import { MembersService } from '../../services/members.service';
-
-const DEFAULT_PHONE_REGION = 'EG';
 
 @Component({
   selector: 'app-members-form',
@@ -52,16 +49,14 @@ export class MembersFormComponent {
     required(path.status);
     validate(path.phoneNumber, ({ value }) => {
       const phone = value();
-      if (!phone.trim()) {
+
+      if (!phone) {
         return undefined;
       }
-      try {
-        return isValidPhoneNumber(phone, DEFAULT_PHONE_REGION)
-          ? undefined
-          : { kind: 'phone' };
-      } catch {
-        return { kind: 'phone' };
-      }
+
+      return /^0[0-9]{10}$/.test(phone)
+        ? undefined
+        : { kind: 'memberPhone' };
     });
   });
 
