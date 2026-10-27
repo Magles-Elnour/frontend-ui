@@ -1,0 +1,12 @@
+.breadcrumb-link {
+  text-decoration: none;
+
+  &:not(.current) {
+    color: inherit;
+  }
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+}

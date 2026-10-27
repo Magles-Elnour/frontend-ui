@@ -26,13 +26,18 @@ import { UserService } from './services/user.service';
 import { httpRequestInterceptor } from './core/interceptors/http/http-request.interceptor';
 import { mockApiInterceptor } from './core/mock/mock-api.interceptor';
 
-const ArabicRangeLabel = (page: number, pageSize: number, length: number) => {
-  if (length == 0 || pageSize == 0) {
-    return `1 من ${page + 1} الصفحة`;
+export const ArabicRangeLabel = (
+  page: number,
+  pageSize: number,
+  length: number,
+) => {
+  if (length === 0 || pageSize === 0) {
+    return 'الصفحة 1 من 1 / المجموع: 0 عنصر';
   }
-  return `الصفحة ${page + 1} من ${Math.ceil(
-    length / pageSize,
-  )} /  المجموع: ${length} عنصر `;
+  const totalPages = Math.ceil(length / pageSize);
+  const start = page * pageSize + 1;
+  const end = Math.min((page + 1) * pageSize, length);
+  return `الصفحة ${page + 1} من ${totalPages} / عرض ${start} - ${end} من ${length} عنصر`;
 };
 
 export function getArabicPaginatorIntl() {
