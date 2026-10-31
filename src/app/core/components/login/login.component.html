@@ -1,70 +1,33 @@
 <section class="d-flex vh-100">
-  @if(userService.isLoading() ){
-  <div class="loading-shade">
-    <mat-spinner></mat-spinner>
-  </div>
-  }
+  <app-loading-shade [show]="userService.isLoading()"></app-loading-shade>
   <div class="h-100 login-section d-flex px-5">
     <form
       class="row py-2 my-auto"
-      #loginForm="ngForm"
-      (ngSubmit)="login()"
+      novalidate
+      (submit)="$event.preventDefault(); login()"
     >
       <h1 class="mat-display-small primary-color mb-5">
         {{ "LOGIN_WELCOME" | transloco }}
       </h1>
-      <label class="pb-2 mat-title-small" for="username">{{
-        "LOGIN_USERNAME" | transloco
-      }}</label>
-      <mat-form-field class="mb-2 col-12">
-        <input
-          matInput
-          placeholder="{{ 'LOGIN_USERNAME_PLACEHOLDER' | transloco }}"
-          required
-          name="username"
-          autocomplete="username"
-          [(ngModel)]="credentials.username"
-          #username="ngModel"
-        />
-        <mat-icon matPrefix> person </mat-icon>
-        <mat-error>
-          <app-form-validation [element]="username.control"></app-form-validation>
-        </mat-error>
-      </mat-form-field>
-      <mat-label class="pb-2 mat-title-small" for="password">{{
-        "LOGIN_PASSWORD" | transloco
-      }}</mat-label>
-      <mat-form-field class="col-12">
-        <input
-          matInput
-          placeholder="{{ 'LOGIN_PASSWORD_PLACEHOLDER' | transloco }}"
-          [type]="hide ? 'password' : 'text'"
-          name="password"
-          required
-          autocomplete="current-password"
-          [(ngModel)]="credentials.password"
-          #password="ngModel"
-        />
-        <button
-          mat-icon-button
-          matPrefix
-          class="f-18"
-          type="button"
-          (click)="hide = !hide"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide"
-        >
-          <mat-icon>
-            {{ hide ? "visibility_off" : "visibility" }}
-          </mat-icon>
-        </button>
-
-        <mat-error>
-          <app-form-validation
-            [element]="password.control"
-          ></app-form-validation>
-        </mat-error>
-      </mat-form-field>
+      <app-input
+        class="col-12"
+        [field]="loginForm.username"
+        label="LOGIN_USERNAME"
+        placeholder="LOGIN_USERNAME_PLACEHOLDER"
+        autocomplete="username"
+        prefixIcon="person"
+        floatLabel="always"
+      ></app-input>
+      <app-input
+        class="col-12"
+        [field]="loginForm.password"
+        label="LOGIN_PASSWORD"
+        placeholder="LOGIN_PASSWORD_PLACEHOLDER"
+        type="password"
+        autocomplete="current-password"
+        [hideToggle]="true"
+        floatLabel="always"
+      ></app-input>
 
       <div class="d-flex mt-4 justify-content-center">
         <button
@@ -72,7 +35,7 @@
           mat-flat-button
           id="login-submit-btn"
           class="w-100"
-          [disabled]="loginForm.invalid"
+          [disabled]="loginForm().invalid() || userService.isLoading()"
         >
           {{ "LOGIN_BTN" | transloco }}
         </button>

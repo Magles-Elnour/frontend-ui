@@ -1,26 +1,25 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { form, validate } from '@angular/forms/signals';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslocoModule } from '@jsverse/transloco';
-import { UserService } from '../../../services/user.service';
-import { FormValidationComponent } from '../../../shared/ui-components/atoms/form-validation/form-validation.component';
+import { TranslocoPipe } from '@jsverse/transloco';
+
 import { SnackbarService } from '../../../services/snackbar.service';
+import { UserService } from '../../../services/user.service';
+import { InputComponent } from '../../../shared/ui-components/atoms/input/input.component';
+import { LoadingShadeComponent } from '../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
+
+interface LoginFormModel {
+  username: string;
+  password: string;
+}
 
 @Component({
   selector: 'app-login',
   imports: [
-    FormsModule,
-    TranslocoModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
+    InputComponent,
+    LoadingShadeComponent,
     MatButtonModule,
-    FormValidationComponent,
+    TranslocoPipe,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -30,14 +29,28 @@ export class LoginComponent {
   userService = inject(UserService);
   private snackbar = inject(SnackbarService);
 
-  credentials: { username?: string; password?: string } = {};
-  hide = true;
+  readonly credentials = signal<LoginFormModel>({ username: '', password: '' });
+
+  readonly loginForm = form(this.credentials, (path) => {
+    validate(path.username, ({ value }) =>
+      value().trim() ? undefined : { kind: 'required' },
+    );
+    validate(path.password, ({ value }) =>
+      value().trim() ? undefined : { kind: 'required' },
+    );
+  });
 
   login(): void {
-    this.userService
-      .signIn(this.credentials.username!, this.credentials.password!)
-      .subscribe({
-        error: () => this.snackbar.error('LOGIN_ERROR'),
-      });
+    if (this.userService.isLoading()) {
+      return;
+    }
+    if (this.loginForm().invalid()) {
+      this.loginForm().markAsTouched();
+      return;
+    }
+    const { username, password } = this.credentials();
+    this.userService.signIn(username.trim(), password).subscribe({
+      error: () => this.snackbar.error('LOGIN_ERROR'),
+    });
   }
 }
