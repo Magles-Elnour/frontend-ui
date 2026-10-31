@@ -1,17 +1,28 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { form, validate } from '@angular/forms/signals';
+import { MatButtonModule } from '@angular/material/button';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SnackbarService } from '../../../services/snackbar.service';
 import { UserService } from '../../../services/user.service';
-import {
-  LoginFormComponent,
-  LoginFormModel,
-} from '../../../shared/ui-components/templates/login-form/login-form.component';
+import { InputComponent } from '../../../shared/ui-components/atoms/input/input.component';
+import { LoadingShadeComponent } from '../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
+
+interface LoginFormModel {
+  username: string;
+  password: string;
+}
 
 @Component({
   selector: 'app-login',
-  imports: [LoginFormComponent],
+  imports: [
+    InputComponent,
+    LoadingShadeComponent,
+    MatButtonModule,
+    TranslocoPipe,
+  ],
   templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
