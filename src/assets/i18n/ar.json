@@ -17,7 +17,7 @@
   "COUNCIL_PROGRAM": "برنامج المجلس",
   "REPORTS": "التقارير",
   "MANAGERS": "المديرين",
-  "SEARCH_NAME": "بحث بالإسم",
+  "SEARCH_NAME": "بحث بالاسم",
   "ADD_MEMBER": "إضافة عضو",
   "MEMBER_IMPORT": "إستيراد",
   "MEMBER_EXPORT": "تصدير",
@@ -78,7 +78,7 @@
   "STATUS_ACTIVE": "نشط",
   "STATUS_SUSPENDED": "موقوف",
   "STATUS_REMOVED": "محذوف",
-  "STATUS_DIED": "متوفى",
+  "STATUS_DIED": "متوفي",
   "CLEAR_FILTERS": "إلغاء التصفية",
   "MEMBER_DELETE": "حذف",
   "MEMBER_DELETE_CONFIRM": "هل أنت متأكد من حذف العضو \"{{name}}\"؟ سيتم نقله إلى المحذوفين مع الاحتفاظ بسجله.",
@@ -92,5 +92,6 @@
   "CANCEL": "إلغاء",
   "DELETE": "حذف",
   "CONFIRM_DELETE_TITLE": "تأكيد الحذف",
-  "NO_RESULTS": "لا توجد نتائج"
+  "NO_RESULTS": "لا توجد نتائج",
+  "NO_MEMBERS_MATCH": "لا توجد نتائج مطابقة لبحثك أو الفلاتر المحددة."
 }
