@@ -1,10 +1,21 @@
 <div class="pt-2">
-  <h2 class="mat-title-large mt-5 mb-4">
-    @for (title of header(); track $index ;let last= $last) {
-    <span class="{{ last ? 'primary-color' : '' }}">
-      {{ title | transloco }}</span
-    >
-    {{ last ? "" : "/ " }}
-    }
-  </h2>
+  <nav aria-label="breadcrumb">
+    <h2 class="mat-title-large mt-5 mb-4">
+      @for (title of header(); track $index; let last = $last) {
+      @if (links()[$index]; as link) {
+      <a
+        class="breadcrumb-link {{ last ? 'primary-color current' : '' }}"
+        [routerLink]="link"
+        [attr.aria-current]="last ? 'page' : null"
+        >{{ title | transloco }}</a
+      >
+      } @else {
+      <span class="{{ last ? 'primary-color' : '' }}">{{
+        title | transloco
+      }}</span>
+      }
+      {{ last ? "" : "/ " }}
+      }
+    </h2>
+  </nav>
 </div>

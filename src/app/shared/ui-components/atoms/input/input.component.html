@@ -1,13 +1,29 @@
-<mat-form-field class="mb-2 col-12">
+<mat-form-field class="mb-2 col-12" [floatLabel]="floatLabel()">
   @if (label()) {
     <mat-label>{{ label()! | transloco }}</mat-label>
   }
+  @if (prefixIcon()) {
+    <mat-icon matPrefix>{{ prefixIcon() }}</mat-icon>
+  }
   <input
     matInput
-    [type]="type()"
+    [type]="type() === 'password' && hideToggle() ? (hidePassword() ? 'password' : 'text') : type()"
     [formField]="field()"
     [placeholder]="(placeholder() ?? '') | transloco"
+    [autocomplete]="autocomplete() ?? 'off'"
   />
+  @if (hideToggle()) {
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      (click)="togglePasswordVisibility()"
+      [attr.aria-label]="(hidePassword() ? 'SHOW_PASSWORD' : 'HIDE_PASSWORD') | transloco"
+      [attr.aria-pressed]="!hidePassword()"
+    >
+      <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+  }
   @let error = field()().errors()[0];
   @if (error) {
     <mat-error>{{ errorKey(error.kind) | transloco }}</mat-error>
