@@ -45,7 +45,6 @@ export class MembersFormComponent {
   });
 
   readonly form = form(this.model, (path) => {
-    required(path.name);
     required(path.status);
     validate(path.name, ({ value }) => {
       return value().trim()
@@ -86,13 +85,17 @@ export class MembersFormComponent {
             });
           },
           error: () => {
-            this.snackbarService.error('MEMBERS_UPDATE_ERROR');
+            this.snackbarService.error('MEMBER_LOAD_ERROR');
           },
         });
     }
   }
 
   addOrUpdate() {
+    if (this.isEditMode && !this.loadedMember?.id) {
+      return;
+    }
+
     if (this.form().invalid()) {
       this.form().markAsTouched();
       return;

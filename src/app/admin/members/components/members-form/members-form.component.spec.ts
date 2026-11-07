@@ -4,6 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { getTranslocoTestingModule } from '../../../../testing/transloco-testing';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { MembersService } from '../../services/members.service';
 
 import { MembersFormComponent } from './members-form.component';
 
@@ -75,6 +76,15 @@ describe('MembersFormComponent', () => {
     expect(submit.disabled).toBeTrue();
   });
 
+  it('disables submit when name contains whitespace only', async () => {
+    const submit: HTMLButtonElement = fixture.nativeElement.querySelector('button[type="submit"]');
+
+    component.model.update((m) => ({ ...m, name: '   ' }));
+    await fixture.whenStable();
+
+    expect(submit.disabled).toBeTrue();
+  });
+
   it('submits the edited member and redirects after a successful update', () => {
     const router = TestBed.inject(Router);
     const snackbar = TestBed.inject(SnackbarService);
@@ -83,7 +93,7 @@ describe('MembersFormComponent', () => {
 
     component.model.update((m) => ({
       ...m,
-      name: 'Updated member',
+      name: '  Updated member  ',
       phoneNumber: '01012345678',
     }));
 
@@ -126,5 +136,48 @@ describe('MembersFormComponent', () => {
 
     expect(errorSpy).toHaveBeenCalledWith('MEMBERS_UPDATE_ERROR');
     expect(navigateSpy).not.toHaveBeenCalled();
+  });
+
+  it('does not create a member when edit data failed to load', () => {
+    const membersService = TestBed.inject(MembersService);
+    const createSpy = spyOn(membersService, 'create').and.callThrough();
+    const updateSpy = spyOn(membersService, 'update').and.callThrough();
+    (component as unknown as { loadedMember?: unknown }).loadedMember = undefined;
+    component.model.update((m) => ({ ...m, name: 'Should not be created' }));
+
+    component.addOrUpdate();
+
+    expect(createSpy).not.toHaveBeenCalled();
+    expect(updateSpy).not.toHaveBeenCalled();
+  });
+
+  it('shows the member load error instead of treating loading failure as add', async () => {
+    TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [MembersFormComponent, getTranslocoTestingModule()],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(withXhr()),
+        provideHttpClientTesting(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { paramMap: { get: () => '1' } },
+          },
+        },
+      ],
+    }).compileComponents();
+
+    const snackbar = TestBed.inject(SnackbarService);
+    const errorSpy = spyOn(snackbar, 'error');
+    TestBed.createComponent(MembersFormComponent);
+    TestBed.inject(HttpTestingController)
+      .expectOne('/api/members/1')
+      .flush(
+        { message: 'Member load failed' },
+        { status: 500, statusText: 'Server Error' },
+      );
+
+    expect(errorSpy).toHaveBeenCalledWith('MEMBER_LOAD_ERROR');
   });
 });

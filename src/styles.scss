@@ -89,6 +89,13 @@ body {
   font-family: "IBM Plex Sans Arabic", sans-serif;
   box-sizing: border-box;
 }
+
+.successSnackbar {
+  --mat-snack-bar-container-color: #2e7d32;
+  --mat-snack-bar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffffff;
+}
+
 .loading-shade {
   position: absolute;
   top: 0;
