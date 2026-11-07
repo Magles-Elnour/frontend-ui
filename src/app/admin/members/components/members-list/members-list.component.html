@@ -51,8 +51,11 @@
                   urlsNames.MEMBERS_EDIT,
                   member.id
                 ]"
+                [attr.aria-label]="'MEMBER_EDIT' | transloco"
+                [attr.title]="'MEMBER_EDIT' | transloco"
               >
                 <mat-icon> border_color </mat-icon>
+                <span class="visually-hidden">{{ "MEMBER_EDIT" | transloco }}</span>
               </button>
               @if (member.status !== MemberStatus.REMOVED) {
               <button
