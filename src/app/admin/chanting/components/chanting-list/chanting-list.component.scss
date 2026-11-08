@@ -2,18 +2,6 @@
   width: min(486px, 100%);
 }
 
-.search-clear-button {
-  position: absolute;
-  left: 8px;
-  top: 24px;
-  z-index: 2;
-}
-
-.search-error {
-  color: var(--mat-sys-error);
-  font-size: 12px;
-  margin: -8px 16px 8px;
-}
 
 .add-cycle-button {
   height: 48px;
