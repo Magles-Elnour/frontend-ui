@@ -70,7 +70,7 @@ describe('ChantingListComponent', () => {
 
   it('filters by cycle number after the debounce', async () => {
     component.searchModel.set({ number: '4' });
-    await new Promise((resolve) => setTimeout(resolve, 550));
+    await new Promise((resolve) => setTimeout(resolve, 750));
     http.expectOne('/api/chanting/cycles?page=0&size=20&number=4').flush({
       content: [{ id: 1, number: 4, startDate: '2026-09-04', status: CycleStatus.COMPLETED }],
       number: 0,
@@ -86,7 +86,7 @@ describe('ChantingListComponent', () => {
     const input = fixture.nativeElement.querySelector('app-input input') as HTMLInputElement;
     input.value = 'a';
     input.dispatchEvent(new Event('input'));
-    await new Promise((resolve) => setTimeout(resolve, 550));
+    await new Promise((resolve) => setTimeout(resolve, 750));
     fixture.detectChanges();
     await fixture.whenStable();
 
@@ -97,7 +97,7 @@ describe('ChantingListComponent', () => {
 
   it('clears the search and reloads all cycles', async () => {
     component.searchModel.set({ number: '4' });
-    await new Promise((resolve) => setTimeout(resolve, 550));
+    await new Promise((resolve) => setTimeout(resolve, 750));
     http.expectOne('/api/chanting/cycles?page=0&size=20&number=4').flush({
       content: [],
       number: 0,
@@ -107,7 +107,7 @@ describe('ChantingListComponent', () => {
     });
 
     component.searchModel.set({ number: '' });
-    await new Promise((resolve) => setTimeout(resolve, 550));
+    await new Promise((resolve) => setTimeout(resolve, 750));
     http.expectOne('/api/chanting/cycles?page=0&size=20').flush({
       content: [{ id: 1, number: 1, startDate: '2026-09-04', status: CycleStatus.ONGOING }],
       number: 0,
@@ -121,7 +121,7 @@ describe('ChantingListComponent', () => {
 
   it('shows the cycles empty state when no cycle matches', async () => {
     component.searchModel.set({ number: '999' });
-    await new Promise((resolve) => setTimeout(resolve, 550));
+    await new Promise((resolve) => setTimeout(resolve, 750));
     http.expectOne('/api/chanting/cycles?page=0&size=20&number=999').flush({
       content: [],
       number: 0,
