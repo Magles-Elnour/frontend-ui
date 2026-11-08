@@ -19,23 +19,6 @@
         prefixIcon="search"
         floatLabel="always"
       ></app-input>
-      @if (searchModel().number) {
-      <button
-        mat-icon-button
-        matSuffix
-        type="button"
-        class="search-clear-button"
-        (click)="clearSearch()"
-        [attr.aria-label]="'CLEAR_FILTERS' | transloco"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-      }
-      @if (searchForm().invalid()) {
-      <div class="search-error" role="alert">
-        {{ "CYCLE_DIGITS_ERROR" | transloco }}
-      </div>
-      }
     </div>
 
     <div class="position-relative">
@@ -47,7 +30,7 @@
         [pageSizeOptions]="[10, 20, 50]"
         [showFirstLastButtons]="true"
         (page)="onPageChange($event)"
-        aria-label="اختيار صفحة الدورات"
+        [attr.aria-label]="'CYCLE_PAGINATION_ARIA' | transloco"
         style="border-radius: 24px 24px 0 0"
       ></mat-paginator>
 

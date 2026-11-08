@@ -108,5 +108,6 @@
   "CYCLE_REMOVE": "إزالة",
   "CYCLE_DIGITS_ERROR": "يرجى إدخال أرقام فقط.",
   "CYCLE_STATUS_ONGOING": "جارية",
-  "CYCLE_STATUS_COMPLETED": "مكتملة"
+  "CYCLE_STATUS_COMPLETED": "مكتملة",
+  "CYCLE_PAGINATION_ARIA": "اختيار صفحة الدورات"
 }

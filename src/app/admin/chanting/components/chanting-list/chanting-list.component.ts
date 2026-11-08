@@ -9,7 +9,6 @@ import { form, validate } from '@angular/forms/signals';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -29,7 +28,6 @@ import { CyclesService } from '../../services/cycles.service';
     PageHeaderComponent,
     MatButtonModule,
     MatIconModule,
-    MatInputModule,
     MatPaginatorModule,
     RouterLink,
     TranslocoPipe,
@@ -73,10 +71,9 @@ export class ChantingListComponent {
   constructor() {
     this.reload$
       .pipe(
-        tap(() => this.loading.set(true)),
+        tap(() => this.loading.set(!this.searchForm().invalid())),
         switchMap(() => {
           if (this.searchForm().invalid()) {
-            this.loading.set(false);
             return of({
               content: this.cycles(),
               number: this.pageNumber(),
@@ -89,7 +86,7 @@ export class ChantingListComponent {
             .set('page', this.pageNumber().toString())
             .set('size', this.pageSize().toString());
           const number = this.searchModel().number;
-          if (!this.searchForm().invalid() && number) {
+          if (number) {
             params = params.set('number', number);
           }
           return this.cyclesService.get(params).pipe(
@@ -108,11 +105,14 @@ export class ChantingListComponent {
     toObservable(this.searchModel)
       .pipe(
         skip(1),
-        debounceTime(300),
+        debounceTime(500),
         takeUntilDestroyed(),
       )
       .subscribe(() => {
         this.pageNumber.set(0);
+        if (this.searchForm().invalid()) {
+          this.searchForm().markAsTouched();
+        }
         this.loadCycles();
       });
     this.loadCycles();
@@ -120,11 +120,6 @@ export class ChantingListComponent {
 
   loadCycles(): void {
     this.reload$.next();
-  }
-
-  clearSearch(): void {
-    this.searchModel.set({ number: '' });
-    this.pageNumber.set(0);
   }
 
   onPageChange(event: PageEvent): void {
