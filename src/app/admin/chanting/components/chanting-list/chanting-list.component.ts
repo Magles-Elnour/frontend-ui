@@ -5,18 +5,21 @@ import {
   signal,
 } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
+import { form, validate } from '@angular/forms/signals';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { catchError, finalize, of } from 'rxjs';
+import { catchError, debounceTime, finalize, of, skip, Subject, switchMap, tap } from 'rxjs';
 
 import { UrlsNames } from '../../../../models/shared-models';
 import { LoadingShadeComponent } from '../../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
 import { PageHeaderComponent } from '../../../../shared/ui-components/atoms/page-header/page-header.component';
 import { EmptyResultComponent } from '../../../../shared/ui-components/templates/empty-result/empty-result.component';
+import { InputComponent } from '../../../../shared/ui-components/atoms/input/input.component';
 import { Cycle, CycleStatus } from '../../models/cycle';
 import { CyclesService } from '../../services/cycles.service';
 
@@ -32,6 +35,7 @@ import { CyclesService } from '../../services/cycles.service';
     TranslocoPipe,
     LoadingShadeComponent,
     EmptyResultComponent,
+    InputComponent,
   ],
   templateUrl: './chanting-list.component.html',
   styleUrl: './chanting-list.component.scss',
@@ -53,51 +57,74 @@ export class ChantingListComponent {
   pageSize = signal(20);
   totalCount = signal(0);
   loading = signal(false);
-  searchNumber = signal('');
-  searchError = signal('');
+  readonly searchModel = signal({ number: '' });
+  readonly searchForm = form(this.searchModel, (path) => {
+    validate(path.number, ({ value }) =>
+      /^[0-9]*$/.test(value()) ? undefined : { kind: 'cycleDigits' },
+    );
+  });
+  private readonly reload$ = new Subject<void>();
+  private readonly arabicDateFormatter = new Intl.DateTimeFormat('ar-EG-u-nu-arab', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
 
   constructor() {
-    this.loadCycles();
-  }
-
-  loadCycles(): void {
-    this.loading.set(true);
-    let params = new HttpParams()
-      .set('page', this.pageNumber().toString())
-      .set('size', this.pageSize().toString());
-
-    if (!this.searchError() && this.searchNumber()) {
-      params = params.set('number', this.searchNumber());
-    }
-
-    this.cyclesService
-      .get(params)
+    this.reload$
       .pipe(
-        catchError(() =>
-          of({ content: [], number: 0, size: 0, totalElements: 0, totalPages: 0 }),
-        ),
-        finalize(() => setTimeout(() => this.loading.set(false), 300)),
+        tap(() => this.loading.set(true)),
+        switchMap(() => {
+          if (this.searchForm().invalid()) {
+            this.loading.set(false);
+            return of({
+              content: this.cycles(),
+              number: this.pageNumber(),
+              size: this.pageSize(),
+              totalElements: this.totalCount(),
+              totalPages: Math.ceil(this.totalCount() / this.pageSize()),
+            });
+          }
+          let params = new HttpParams()
+            .set('page', this.pageNumber().toString())
+            .set('size', this.pageSize().toString());
+          const number = this.searchModel().number;
+          if (!this.searchForm().invalid() && number) {
+            params = params.set('number', number);
+          }
+          return this.cyclesService.get(params).pipe(
+            catchError(() =>
+              of({ content: [], number: 0, size: 0, totalElements: 0, totalPages: 0 }),
+            ),
+            finalize(() => setTimeout(() => this.loading.set(false), 300)),
+          );
+        }),
+        takeUntilDestroyed(),
       )
       .subscribe((response) => {
         this.cycles.set(response.content);
         this.totalCount.set(response.totalElements);
       });
-  }
-
-  onSearch(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchNumber.set(value);
-    this.searchError.set(/^\d*$/.test(value) ? '' : 'يرجى إدخال أرقام فقط.');
-    this.pageNumber.set(0);
+    toObservable(this.searchModel)
+      .pipe(
+        skip(1),
+        debounceTime(300),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        this.pageNumber.set(0);
+        this.loadCycles();
+      });
     this.loadCycles();
   }
 
-  clearSearch(input: HTMLInputElement): void {
-    input.value = '';
-    this.searchNumber.set('');
-    this.searchError.set('');
+  loadCycles(): void {
+    this.reload$.next();
+  }
+
+  clearSearch(): void {
+    this.searchModel.set({ number: '' });
     this.pageNumber.set(0);
-    this.loadCycles();
   }
 
   onPageChange(event: PageEvent): void {
@@ -108,10 +135,6 @@ export class ChantingListComponent {
 
   formatDate(value: string): string {
     const date = new Date(`${value}T00:00:00`);
-    return new Intl.DateTimeFormat('ar-EG-u-nu-arab', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }).format(date);
+    return this.arabicDateFormatter.format(date);
   }
 }

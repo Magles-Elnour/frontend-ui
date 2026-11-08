@@ -11,34 +11,32 @@
       </button>
     </div>
 
-    <mat-form-field class="search-field" appearance="outline">
-      <mat-label>{{ "SEARCH_CYCLE_NUMBER" | transloco }}</mat-label>
-      <input
-        #searchInput
-        matInput
-        type="text"
-        inputmode="numeric"
-        pattern="[0-9]*"
-        [value]="searchNumber()"
-        (input)="onSearch($event)"
-        [placeholder]="'SEARCH_CYCLE_NUMBER' | transloco"
-      />
-      <mat-icon matPrefix>search</mat-icon>
-      @if (searchNumber()) {
+    <div class="search-field position-relative">
+      <app-input
+        [field]="searchForm.number"
+        label="SEARCH_CYCLE_NUMBER"
+        placeholder="SEARCH_CYCLE_NUMBER"
+        prefixIcon="search"
+        floatLabel="always"
+      ></app-input>
+      @if (searchModel().number) {
       <button
         mat-icon-button
         matSuffix
         type="button"
-        (click)="clearSearch(searchInput)"
+        class="search-clear-button"
+        (click)="clearSearch()"
         [attr.aria-label]="'CLEAR_FILTERS' | transloco"
       >
         <mat-icon>close</mat-icon>
       </button>
       }
-      @if (searchError()) {
-      <mat-error>{{ searchError() }}</mat-error>
+      @if (searchForm().invalid()) {
+      <div class="search-error" role="alert">
+        {{ "CYCLE_DIGITS_ERROR" | transloco }}
+      </div>
       }
-    </mat-form-field>
+    </div>
 
     <div class="position-relative">
       <app-loading-shade [show]="loading()"></app-loading-shade>
@@ -49,7 +47,7 @@
         [pageSizeOptions]="[10, 20, 50]"
         [showFirstLastButtons]="true"
         (page)="onPageChange($event)"
-        aria-label="Select cycle page"
+        aria-label="اختيار صفحة الدورات"
         style="border-radius: 24px 24px 0 0"
       ></mat-paginator>
 
@@ -72,7 +70,11 @@
                 class="status-badge"
                 [class.completed]="cycle.status === CycleStatus.COMPLETED"
               >
-                {{ cycle.status === CycleStatus.ONGOING ? "جارية" : "مكتملة" }}
+                {{
+                  cycle.status === CycleStatus.ONGOING
+                    ? ("CYCLE_STATUS_ONGOING" | transloco)
+                    : ("CYCLE_STATUS_COMPLETED" | transloco)
+                }}
               </span>
             </td>
             <td class="last-row">
@@ -113,7 +115,7 @@
         </tbody>
       </table>
       @if (!loading() && cycles().length === 0) {
-      <app-empty-result message="NO_MEMBERS_MATCH"></app-empty-result>
+      <app-empty-result message="NO_CYCLES_MATCH"></app-empty-result>
       }
     </div>
   </div>
