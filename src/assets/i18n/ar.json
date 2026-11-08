@@ -96,8 +96,8 @@
   "DELETE": "حذف",
   "CONFIRM_DELETE_TITLE": "تأكيد الحذف",
   "NO_RESULTS": "لا توجد نتائج",
-  "NO_MEMBERS_MATCH": "لا توجد نتائج مطابقة لبحثك أو الفلاتر المحددة."
-  ,
+  "NO_MEMBERS_MATCH": "لا توجد نتائج مطابقة لبحثك أو الفلاتر المحددة.",
+  "NO_CYCLES_MATCH": "لا توجد نتائج مطابقة لبحثك أو الفلاتر المحددة.",
   "CHANTING_CYCLES": "الدورات",
   "SEARCH_CYCLE_NUMBER": "بحث برقم الدورة",
   "ADD_CYCLE": "إضافة دورة",
@@ -107,5 +107,6 @@
   "CYCLE_EDIT": "تعديل",
   "CYCLE_REMOVE": "إزالة",
   "CYCLE_DIGITS_ERROR": "يرجى إدخال أرقام فقط.",
-  "CYCLE_WEEKS": "أسابيع الدورة"
+  "CYCLE_STATUS_ONGOING": "جارية",
+  "CYCLE_STATUS_COMPLETED": "مكتملة"
 }
