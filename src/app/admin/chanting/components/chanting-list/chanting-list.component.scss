@@ -1,0 +1,74 @@
+.search-field {
+  width: min(486px, 100%);
+}
+
+.add-cycle-button {
+  height: 48px;
+  margin-left: auto;
+}
+
+table.cycles-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead tr {
+    background-color: var(--sys-surface);
+    border-top: 1px solid #dbdbdb;
+  }
+
+  th {
+    height: 42px;
+    padding: 0 12px;
+    position: relative;
+    border-left: 1px solid #dbdbdb;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  th:last-child {
+    border-left: 0;
+  }
+
+  td {
+    height: 48px;
+    padding: 0 12px;
+    position: relative;
+    border-top: 1px solid #ededed;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  th.text-center,
+  td.text-center,
+  td.last-row {
+    text-align: center;
+  }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  height: 32px;
+  border-radius: 16px;
+  color: #1e6a39;
+  background: #e8f5ec;
+}
+
+.status-badge.completed {
+  color: #555b6e;
+  background: #eef0f4;
+}
+
+.table-btn {
+  padding: 8px !important;
+  min-width: 32px;
+  max-height: 32px;
+
+  .mat-icon {
+    margin: 0 !important;
+    color: #8a8aa3;
+  }
+}

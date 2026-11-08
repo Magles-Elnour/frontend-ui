@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Member, MemberResponse, MemberStatus } from '../../admin/members/models/member';
+import { Cycle, CycleResponse, CycleStatus } from '../../admin/chanting/models/cycle';
 
 const MEMBERS_STORAGE_KEY = 'mock-api-members-v1';
 const MOCK_SESSION_KEY = 'mock-auth-username';
@@ -10,6 +11,16 @@ const MOCK_TOKEN = 'mock.eyJyb2xlIjoiQURNSU4ifQ==.signature';
 export class MockApiService {
   private members = this.loadMembers();
   private nextId = Math.max(0, ...this.members.map((member) => member.id!)) + 1;
+  private cycles: Cycle[] = [
+    { id: 1, number: 1, startDate: '2026-09-04', status: CycleStatus.COMPLETED },
+    { id: 2, number: 2, startDate: '2026-09-11', status: CycleStatus.COMPLETED },
+    { id: 3, number: 3, startDate: '2026-09-18', status: CycleStatus.COMPLETED },
+    { id: 4, number: 4, startDate: '2026-09-25', status: CycleStatus.COMPLETED },
+    { id: 5, number: 5, startDate: '2026-10-02', status: CycleStatus.COMPLETED },
+    { id: 6, number: 6, startDate: '2026-10-09', status: CycleStatus.ONGOING },
+    { id: 7, number: 7, startDate: '2026-10-16', status: CycleStatus.ONGOING },
+    { id: 8, number: 8, startDate: '2026-10-23', status: CycleStatus.ONGOING },
+  ];
 
   handle(req: HttpRequest<unknown>, url: URL): HttpResponse<unknown> {
     const path = url.pathname.replace(/\/$/, '');
@@ -45,6 +56,10 @@ export class MockApiService {
       }
     }
 
+    if (req.method === 'GET' && path === '/api/chanting/cycles') {
+      return this.response(req, this.listCycles(url.searchParams));
+    }
+
     const match = path.match(/^\/api\/members\/(\d+)$/);
     if (match) {
       const id = Number(match[1]);
@@ -77,6 +92,23 @@ export class MockApiService {
       (member.name || '').toLocaleLowerCase().includes(name) &&
       (status ? member.status === status : member.status !== MemberStatus.REMOVED),
     );
+
+    return {
+      content: filtered.slice(number * size, (number + 1) * size),
+      number,
+      size,
+      totalElements: filtered.length,
+      totalPages: Math.ceil(filtered.length / size),
+    };
+  }
+
+  private listCycles(params: URLSearchParams): CycleResponse {
+    const number = this.integerParam(params, 'page', 0, 0);
+    const size = this.integerParam(params, 'size', 20, 1);
+    const cycleNumber = (params.get('number') || '').trim();
+    const filtered = cycleNumber
+      ? this.cycles.filter((cycle) => cycle.number.toString().includes(cycleNumber))
+      : this.cycles;
 
     return {
       content: filtered.slice(number * size, (number + 1) * size),

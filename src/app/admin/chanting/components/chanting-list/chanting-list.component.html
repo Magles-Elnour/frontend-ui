@@ -1,1 +1,120 @@
-<p>chanting-list works!</p>
+<app-page-header
+  [header]="['CHANTING', 'CHANTING_CYCLES']"
+  [links]="breadcrumbLinks"
+></app-page-header>
+<section class="section-card p-3">
+  <div class="p-1">
+    <div class="d-flex align-items-start justify-content-between mb-3">
+      <button mat-flat-button type="button" class="add-cycle-button">
+        {{ "ADD_CYCLE" | transloco }}
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>{{ "SEARCH_CYCLE_NUMBER" | transloco }}</mat-label>
+      <input
+        #searchInput
+        matInput
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        [value]="searchNumber()"
+        (input)="onSearch($event)"
+        [placeholder]="'SEARCH_CYCLE_NUMBER' | transloco"
+      />
+      <mat-icon matPrefix>search</mat-icon>
+      @if (searchNumber()) {
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="clearSearch(searchInput)"
+        [attr.aria-label]="'CLEAR_FILTERS' | transloco"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+      @if (searchError()) {
+      <mat-error>{{ searchError() }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="position-relative">
+      <app-loading-shade [show]="loading()"></app-loading-shade>
+      <mat-paginator
+        [length]="totalCount()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageNumber()"
+        [pageSizeOptions]="[10, 20, 50]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+        aria-label="Select cycle page"
+        style="border-radius: 24px 24px 0 0"
+      ></mat-paginator>
+
+      <table class="cycles-table">
+        <thead>
+          <tr>
+            <th>{{ "CYCLE_NUMBER" | transloco }}</th>
+            <th>{{ "CYCLE_START_DATE" | transloco }}</th>
+            <th class="text-center">{{ "STATUS" | transloco }}</th>
+            <th class="text-center">{{ "TABLE_TOOLS" | transloco }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cycle of cycles(); track cycle.id) {
+          <tr>
+            <td>{{ cycle.number }}</td>
+            <td>{{ formatDate(cycle.startDate) }}</td>
+            <td class="text-center">
+              <span
+                class="status-badge"
+                [class.completed]="cycle.status === CycleStatus.COMPLETED"
+              >
+                {{ cycle.status === CycleStatus.ONGOING ? "جارية" : "مكتملة" }}
+              </span>
+            </td>
+            <td class="last-row">
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn"
+                [routerLink]="[
+                  '/',
+                  urlsNames.ADMIN,
+                  urlsNames.CHANTING,
+                  urlsNames.CHANTING_ATTENDANCE
+                ]"
+                [queryParams]="{ cycle: cycle.id }"
+                [attr.aria-label]="'CYCLE_VIEW' | transloco"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn ms-2"
+                [attr.aria-label]="'CYCLE_EDIT' | transloco"
+              >
+                <mat-icon>border_color</mat-icon>
+              </button>
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn ms-2"
+                [attr.aria-label]="'CYCLE_REMOVE' | transloco"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      @if (!loading() && cycles().length === 0) {
+      <app-empty-result message="NO_MEMBERS_MATCH"></app-empty-result>
+      }
+    </div>
+  </div>
+</section>

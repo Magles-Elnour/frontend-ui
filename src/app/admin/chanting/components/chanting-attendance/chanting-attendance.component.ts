@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-chanting-attendance',
@@ -8,5 +11,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChantingAttendanceComponent {
-
+  private route = inject(ActivatedRoute);
+  selectedCycle = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('cycle'))),
+    { initialValue: null },
+  );
 }
