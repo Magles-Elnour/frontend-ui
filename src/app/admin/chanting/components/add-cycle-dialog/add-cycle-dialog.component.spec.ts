@@ -48,16 +48,19 @@ describe('AddCycleDialogComponent', () => {
     http.expectNone('/api/chanting/cycles');
   });
 
-  it('accepts digits only, including Arabic-Indic digits', () => {
-    component.model.set({ number: '٤', startDate: '2026-11-09' });
+  it('accepts ASCII digits only, matching the cycles search field', () => {
+    component.model.set({ number: '4', startDate: '2026-11-09' });
     expect(component.form().invalid()).toBeFalse();
+
+    component.model.set({ number: '٤', startDate: '2026-11-09' });
+    expect(component.form().invalid()).toBeTrue();
 
     component.model.set({ number: '4a', startDate: '2026-11-09' });
     expect(component.form().invalid()).toBeTrue();
   });
 
   it('creates a cycle and closes after success', () => {
-    component.model.set({ number: '٤', startDate: '2026-11-09' });
+    component.model.set({ number: '4', startDate: '2026-11-09' });
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('.save-button').disabled).toBeFalse();
 
