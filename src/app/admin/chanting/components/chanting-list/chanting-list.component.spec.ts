@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { getTranslocoTestingModule } from '../../../../testing/transloco-testing';
 import { CycleStatus } from '../../models/cycle';
@@ -39,6 +40,36 @@ describe('ChantingListComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('opens the add-cycle dialog and closes it from cancel or close', async () => {
+    fixture.nativeElement.querySelector('.add-cycle-button').click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    let dialog = document.querySelector('mat-dialog-container');
+    expect(dialog).not.toBeNull();
+    expect(dialog?.querySelector('[mat-dialog-title]')?.textContent).toContain('ADD_CYCLE');
+    (dialog?.querySelector('mat-dialog-actions button') as HTMLButtonElement).click();
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    expect(document.querySelector('mat-dialog-container')).toBeNull();
+    http.expectNone((request) =>
+      request.method === 'POST' && request.url === '/api/chanting/cycles',
+    );
+
+    fixture.nativeElement.querySelector('.add-cycle-button').click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    dialog = document.querySelector('mat-dialog-container');
+    expect(dialog).not.toBeNull();
+    (dialog?.querySelector('.dialog-header button') as HTMLButtonElement).click();
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    expect(document.querySelector('mat-dialog-container')).toBeNull();
+    http.expectNone((request) =>
+      request.method === 'POST' && request.url === '/api/chanting/cycles',
+    );
+
+    TestBed.inject(MatDialog).closeAll();
   });
 
   it('renders the required columns and Arabic date', async () => {

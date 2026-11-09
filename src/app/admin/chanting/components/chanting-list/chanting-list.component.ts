@@ -131,7 +131,6 @@ export class ChantingListComponent {
       .open(AddCycleDialogComponent, {
         width: '560px',
         maxWidth: 'calc(100vw - 32px)',
-        disableClose: true,
       })
       .afterClosed()
       .subscribe((created) => {

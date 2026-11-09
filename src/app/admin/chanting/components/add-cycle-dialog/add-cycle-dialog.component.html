@@ -4,7 +4,7 @@
     mat-icon-button
     type="button"
     mat-dialog-close
-    aria-label="إغلاق"
+    [attr.aria-label]="'CLOSE' | transloco"
   >
     <mat-icon>close</mat-icon>
   </button>
@@ -14,18 +14,16 @@
   <app-input
     [field]="form.number"
     label="CYCLE_NUMBER"
-    placeholder="CYCLE_NUMBER"
   ></app-input>
 
   <app-input
     [field]="form.startDate"
     label="CYCLE_START_DATE"
-    placeholder="CYCLE_START_DATE"
     type="date"
   ></app-input>
 
   <p class="cycle-explanation">
-    تتكون الدورة من 30 أسبوعًا، يمكنك تعديل أسماء الأسابيع وتواريخها من صفحة الأسابيع.
+    {{ "CYCLE_EXPLANATION" | transloco }}
   </p>
 </mat-dialog-content>
 
@@ -40,6 +38,6 @@
     [disabled]="form().invalid() || saving()"
     (click)="save()"
   >
-    حفظ
+    {{ "SAVE" | transloco }}
   </button>
 </mat-dialog-actions>

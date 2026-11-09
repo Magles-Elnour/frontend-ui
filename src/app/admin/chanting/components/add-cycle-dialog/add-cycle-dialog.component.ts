@@ -33,7 +33,9 @@ export class AddCycleDialogComponent {
     validate(path.number, ({ value }) => {
       const number = value();
       if (!number) return { kind: 'cycleNumberRequired' };
-      return /^[0-9]+$/.test(number) ? undefined : { kind: 'cycleDigits' };
+      return /^[0-9\u0660-\u0669\u06f0-\u06f9]+$/.test(number)
+        ? undefined
+        : { kind: 'cycleDigits' };
     });
     validate(path.startDate, ({ value }) =>
       value() ? undefined : { kind: 'cycleDateRequired' },
@@ -48,8 +50,11 @@ export class AddCycleDialogComponent {
     }
 
     const { number, startDate } = this.model();
+    const normalizedNumber = number
+      .replace(/[٠-٩]/g, (digit) => String(digit.charCodeAt(0) - 0x0660))
+      .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 0x06f0));
     this.saving.set(true);
-    this.cyclesService.create({ number: Number(number), startDate })
+    this.cyclesService.create({ number: Number(normalizedNumber), startDate })
       .pipe(finalize(() => this.saving.set(false)))
       .subscribe({
         next: () => {
