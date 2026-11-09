@@ -59,6 +59,20 @@ export class MockApiService {
     if (req.method === 'GET' && path === '/api/chanting/cycles') {
       return this.response(req, this.listCycles(url.searchParams));
     }
+    if (req.method === 'POST' && path === '/api/chanting/cycles') {
+      const body = req.body as { number?: number; startDate?: string } | null;
+      if (!body || !Number.isInteger(body.number) || !body.startDate) {
+        return this.fail(req, 400, 'Invalid cycle data');
+      }
+      const cycle: Cycle = {
+        id: Math.max(0, ...this.cycles.map((item) => item.id)) + 1,
+        number: body.number!,
+        startDate: body.startDate,
+        status: CycleStatus.ONGOING,
+      };
+      this.cycles.unshift(cycle);
+      return this.response(req, cycle, 201);
+    }
 
     const match = path.match(/^\/api\/members\/(\d+)$/);
     if (match) {

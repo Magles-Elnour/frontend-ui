@@ -3,6 +3,8 @@ const FIELD_ERROR_KEYS: Record<string, string> = {
   phone: 'PHONE_INVALID',
   memberPhone: 'MEMBER_PHONE_INVALID',
   cycleDigits: 'CYCLE_DIGITS_ERROR',
+  cycleNumberRequired: 'CYCLE_NUMBER_REQUIRED',
+  cycleDateRequired: 'CYCLE_DATE_REQUIRED',
 };
 
 export function fieldErrorKey(kind: string): string {

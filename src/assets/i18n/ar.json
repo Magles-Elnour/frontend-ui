@@ -108,7 +108,11 @@
   "CYCLE_VIEW": "عرض",
   "CYCLE_EDIT": "تعديل",
   "CYCLE_REMOVE": "إزالة",
-  "CYCLE_DIGITS_ERROR": "يرجى إدخال أرقام فقط.",
+  "CYCLE_DIGITS_ERROR": "يرجى إدخال أرقام فقط",
+  "CYCLE_NUMBER_REQUIRED": "يرجى إدخال رقم الدورة",
+  "CYCLE_DATE_REQUIRED": "يرجى تحديد تاريخ بداية الدورة",
+  "CYCLE_SAVE_SUCCESS": "تم إضافة الدورة بنجاح",
+  "GLOBAL_ERROR": "حدث خطأ ما، يرجى المحاولة مرة أخرى",
   "CYCLE_STATUS_ONGOING": "جارية",
   "CYCLE_STATUS_COMPLETED": "مكتملة",
   "CYCLE_PAGINATION_ARIA": "اختيار صفحة الدورات"

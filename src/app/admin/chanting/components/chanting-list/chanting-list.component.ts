@@ -9,6 +9,7 @@ import { form, validate } from '@angular/forms/signals';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -21,6 +22,7 @@ import { EmptyResultComponent } from '../../../../shared/ui-components/templates
 import { InputComponent } from '../../../../shared/ui-components/atoms/input/input.component';
 import { Cycle, CycleStatus } from '../../models/cycle';
 import { CyclesService } from '../../services/cycles.service';
+import { AddCycleDialogComponent } from '../add-cycle-dialog/add-cycle-dialog.component';
 
 @Component({
   selector: 'app-chanting-list',
@@ -28,6 +30,7 @@ import { CyclesService } from '../../services/cycles.service';
     PageHeaderComponent,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
     MatPaginatorModule,
     RouterLink,
     TranslocoPipe,
@@ -49,6 +52,7 @@ export class ChantingListComponent {
   ];
 
   private cyclesService = inject(CyclesService);
+  private dialog = inject(MatDialog);
 
   cycles = signal<Cycle[]>([]);
   pageNumber = signal(0);
@@ -120,6 +124,21 @@ export class ChantingListComponent {
 
   loadCycles(): void {
     this.reload$.next();
+  }
+
+  openAddCycleDialog(): void {
+    this.dialog
+      .open(AddCycleDialogComponent, {
+        width: '560px',
+        maxWidth: 'calc(100vw - 32px)',
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((created) => {
+        if (created) {
+          this.loadCycles();
+        }
+      });
   }
 
   onPageChange(event: PageEvent): void {

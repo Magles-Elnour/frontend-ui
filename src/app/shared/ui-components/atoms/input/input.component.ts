@@ -26,7 +26,7 @@ export class InputComponent {
   field = input.required<FieldTree<string>>();
   label = input<string>();
   placeholder = input<string>();
-  type = input<'text' | 'email' | 'tel' | 'number' | 'password'>('text');
+  type = input<'text' | 'email' | 'tel' | 'number' | 'password' | 'date'>('text');
   autocomplete = input<string>();
   prefixIcon = input<string>();
   hideToggle = input(false);

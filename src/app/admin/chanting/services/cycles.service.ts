@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CycleResponse } from '../models/cycle';
+import { CreateCycleRequest, Cycle, CycleResponse } from '../models/cycle';
 
 @Injectable({ providedIn: 'root' })
 export class CyclesService {
@@ -10,5 +10,9 @@ export class CyclesService {
 
   get(params: HttpParams): Observable<CycleResponse> {
     return this.http.get<CycleResponse>(this.baseUrl, { params });
+  }
+
+  create(request: CreateCycleRequest): Observable<Cycle> {
+    return this.http.post<Cycle>(this.baseUrl, request);
   }
 }

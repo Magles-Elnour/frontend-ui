@@ -15,3 +15,8 @@ export interface Cycle {
 export interface CycleResponse extends BEResponse {
   content: Cycle[];
 }
+
+export interface CreateCycleRequest {
+  number: number;
+  startDate: string;
+}
