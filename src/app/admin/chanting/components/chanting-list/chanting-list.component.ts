@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { catchError, debounceTime, finalize, of, skip, Subject, switchMap, tap } from 'rxjs';
+import { catchError, finalize, of, skip, Subject, switchMap, tap } from 'rxjs';
 
 import { UrlsNames } from '../../../../models/shared-models';
 import { LoadingShadeComponent } from '../../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
@@ -105,7 +105,6 @@ export class ChantingListComponent {
     toObservable(this.searchModel)
       .pipe(
         skip(1),
-        debounceTime(500),
         takeUntilDestroyed(),
       )
       .subscribe(() => {
