@@ -40,7 +40,7 @@ table.cycles-table {
     padding: 0 12px;
     position: relative;
     border-left: 1px solid #dbdbdb;
-    text-align: right;
+    text-align: center;
     font-size: 14px;
     font-weight: 600;
   }
@@ -56,11 +56,6 @@ table.cycles-table {
     border-top: 1px solid #ededed;
     font-size: 16px;
     font-weight: 600;
-  }
-
-  th.text-center,
-  td.text-center,
-  td.last-row {
     text-align: center;
   }
 }
