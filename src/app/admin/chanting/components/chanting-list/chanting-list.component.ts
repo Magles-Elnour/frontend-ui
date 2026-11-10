@@ -13,7 +13,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { catchError, debounceTime, finalize, of, skip, Subject, switchMap, tap } from 'rxjs';
+import { catchError, finalize, of, skip, Subject, switchMap, tap } from 'rxjs';
 
 import { UrlsNames } from '../../../../models/shared-models';
 import { LoadingShadeComponent } from '../../../../shared/ui-components/atoms/loading-shade/loading-shade.component';
@@ -58,6 +58,7 @@ export class ChantingListComponent {
   pageNumber = signal(0);
   pageSize = signal(20);
   totalCount = signal(0);
+  latestCycleNumber = signal(0);
   loading = signal(false);
   readonly searchModel = signal({ number: '' });
   readonly searchForm = form(this.searchModel, (path) => {
@@ -103,13 +104,17 @@ export class ChantingListComponent {
         takeUntilDestroyed(),
       )
       .subscribe((response) => {
-        this.cycles.set(response.content);
+        this.cycles.set([...response.content].sort((first, second) => second.number - first.number));
         this.totalCount.set(response.totalElements);
+        if (!this.searchModel().number && this.pageNumber() === 0 && response.content.length) {
+          this.latestCycleNumber.set(
+            Math.max(...response.content.map((cycle) => cycle.number)),
+          );
+        }
       });
     toObservable(this.searchModel)
       .pipe(
         skip(1),
-        debounceTime(500),
         takeUntilDestroyed(),
       )
       .subscribe(() => {
@@ -129,8 +134,10 @@ export class ChantingListComponent {
   openAddCycleDialog(): void {
     this.dialog
       .open(AddCycleDialogComponent, {
-        width: '560px',
+        width: '520px',
         maxWidth: 'calc(100vw - 32px)',
+        panelClass: 'add-cycle-dialog-panel',
+        data: { number: this.latestCycleNumber() + 1 },
       })
       .afterClosed()
       .subscribe((created) => {

@@ -4,21 +4,24 @@
 ></app-page-header>
 <section class="section-card p-3">
   <div class="p-1">
-    <div class="d-flex align-items-start justify-content-between mb-3">
-      <button mat-flat-button type="button" class="add-cycle-button" (click)="openAddCycleDialog()">
-        {{ "ADD_CYCLE" | transloco }}
+    <div class="cycles-toolbar mb-3">
+      <div class="search-field position-relative">
+        <app-input
+          [field]="searchForm.number"
+          label="SEARCH_CYCLE_NUMBER"
+          labelPlacement="above"
+          placeholder="ENTER_CYCLE_NUMBER"
+        ></app-input>
+      </div>
+      <button
+        mat-flat-button
+        type="button"
+        class="add-cycle-button"
+        (click)="openAddCycleDialog()"
+      >
         <mat-icon>add</mat-icon>
+        {{ "ADD_CYCLE" | transloco }}
       </button>
-    </div>
-
-    <div class="search-field position-relative">
-      <app-input
-        [field]="searchForm.number"
-        label="SEARCH_CYCLE_NUMBER"
-        placeholder="SEARCH_CYCLE_NUMBER"
-        prefixIcon="search"
-        floatLabel="always"
-      ></app-input>
     </div>
 
     <div class="position-relative">
@@ -46,7 +49,7 @@
         <tbody>
           @for (cycle of cycles(); track cycle.id) {
           <tr>
-            <td>{{ cycle.number }}</td>
+            <td>{{ "CYCLE_NUMBER_VALUE" | transloco: { number: cycle.number } }}</td>
             <td>{{ formatDate(cycle.startDate) }}</td>
             <td class="text-center">
               <span
@@ -87,7 +90,7 @@
               <button
                 mat-stroked-button
                 type="button"
-                class="table-btn ms-2"
+                class="table-btn delete-btn ms-2"
                 [attr.aria-label]="'CYCLE_REMOVE' | transloco"
               >
                 <mat-icon>delete</mat-icon>

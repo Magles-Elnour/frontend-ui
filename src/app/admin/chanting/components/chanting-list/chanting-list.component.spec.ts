@@ -42,6 +42,26 @@ describe('ChantingListComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('places the add-cycle action after the search field', () => {
+    const search = fixture.nativeElement.querySelector('.search-field');
+    const addAction = fixture.nativeElement.querySelector('.add-cycle-button');
+    const searchInput = search.querySelector('input') as HTMLInputElement;
+    const searchIcon = search.querySelector('mat-icon');
+    const searchLabel = search.querySelector('.input-label') as HTMLElement;
+    const addIcon = addAction.querySelector('mat-icon');
+
+    expect(search.parentElement).toBe(addAction.parentElement);
+    expect(search.compareDocumentPosition(addAction) & Node.DOCUMENT_POSITION_FOLLOWING)
+      .toBeTruthy();
+    expect(searchInput.placeholder).toBe('ENTER_CYCLE_NUMBER');
+    expect(searchLabel.textContent).toContain('SEARCH_CYCLE_NUMBER');
+    expect(searchInput.getAttribute('aria-label')).toBe('SEARCH_CYCLE_NUMBER');
+    expect(search.querySelector('mat-label')).toBeNull();
+    expect(searchIcon).toBeNull();
+    expect(addIcon).not.toBeNull();
+    expect(addAction.textContent).toContain('ADD_CYCLE');
+  });
+
   it('opens the add-cycle dialog and closes it from cancel or close', async () => {
     fixture.nativeElement.querySelector('.add-cycle-button').click();
     fixture.detectChanges();
@@ -50,7 +70,7 @@ describe('ChantingListComponent', () => {
     let dialog = document.querySelector('mat-dialog-container');
     expect(dialog).not.toBeNull();
     expect(dialog?.querySelector('[mat-dialog-title]')?.textContent).toContain('ADD_CYCLE');
-    (dialog?.querySelector('mat-dialog-actions button') as HTMLButtonElement).click();
+    (dialog?.querySelector('mat-dialog-actions button[mat-dialog-close]') as HTMLButtonElement).click();
     await new Promise((resolve) => setTimeout(resolve, 150));
     expect(document.querySelector('mat-dialog-container')).toBeNull();
     http.expectNone((request) =>
@@ -72,7 +92,7 @@ describe('ChantingListComponent', () => {
     TestBed.inject(MatDialog).closeAll();
   });
 
-  it('renders the required columns and Arabic date', async () => {
+  it('renders cycle numbers, required columns, and Arabic dates in descending order', async () => {
     component.loadCycles();
     http.expectOne('/api/chanting/cycles?page=0&size=20').flush({
       content: [
@@ -82,16 +102,24 @@ describe('ChantingListComponent', () => {
           startDate: '2026-09-04',
           status: CycleStatus.COMPLETED,
         },
+        {
+          id: 2,
+          number: 12,
+          startDate: '2026-09-11',
+          status: CycleStatus.ONGOING,
+        },
       ],
       number: 0,
       size: 20,
-      totalElements: 1,
+      totalElements: 2,
       totalPages: 1,
     });
     await fixture.whenStable();
 
     const text = fixture.nativeElement.textContent;
+    expect(component.cycles().map((cycle) => cycle.number)).toEqual([12, 4]);
     expect(text).toContain('CYCLE_NUMBER');
+    expect(text).toContain('CYCLE_NUMBER_VALUE');
     expect(text).toContain('CYCLE_START_DATE');
     expect(text).toContain('STATUS');
     expect(text).toContain('TABLE_TOOLS');
@@ -99,9 +127,31 @@ describe('ChantingListComponent', () => {
     expect(text).toContain('CYCLE_STATUS_COMPLETED');
   });
 
-  it('filters by cycle number after the debounce', async () => {
+  it('opens the add-cycle dialog with the next cycle number', async () => {
+    component.loadCycles();
+    http.expectOne('/api/chanting/cycles?page=0&size=20').flush({
+      content: [{ id: 31, number: 31, startDate: '2026-09-04', status: CycleStatus.ONGOING }],
+      number: 0,
+      size: 20,
+      totalElements: 1,
+      totalPages: 1,
+    });
+    await fixture.whenStable();
+
+    fixture.nativeElement.querySelector('.add-cycle-button').click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const numberInput = document.querySelector(
+      'mat-dialog-container app-input input',
+    ) as HTMLInputElement;
+    expect(numberInput.value).toBe('32');
+    TestBed.inject(MatDialog).closeAll();
+  });
+
+  it('filters by cycle number immediately', async () => {
     component.searchModel.set({ number: '4' });
-    await new Promise((resolve) => setTimeout(resolve, 750));
+    await fixture.whenStable();
     http.expectOne('/api/chanting/cycles?page=0&size=20&number=4').flush({
       content: [{ id: 1, number: 4, startDate: '2026-09-04', status: CycleStatus.COMPLETED }],
       number: 0,
@@ -117,9 +167,8 @@ describe('ChantingListComponent', () => {
     const input = fixture.nativeElement.querySelector('app-input input') as HTMLInputElement;
     input.value = 'a';
     input.dispatchEvent(new Event('input'));
-    await new Promise((resolve) => setTimeout(resolve, 750));
-    fixture.detectChanges();
     await fixture.whenStable();
+    fixture.detectChanges();
 
     expect(component.searchForm().invalid()).toBeTrue();
     expect(fixture.nativeElement.querySelector('app-input').textContent)
@@ -128,7 +177,7 @@ describe('ChantingListComponent', () => {
 
   it('clears the search and reloads all cycles', async () => {
     component.searchModel.set({ number: '4' });
-    await new Promise((resolve) => setTimeout(resolve, 750));
+    await fixture.whenStable();
     http.expectOne('/api/chanting/cycles?page=0&size=20&number=4').flush({
       content: [],
       number: 0,
@@ -138,7 +187,7 @@ describe('ChantingListComponent', () => {
     });
 
     component.searchModel.set({ number: '' });
-    await new Promise((resolve) => setTimeout(resolve, 750));
+    await fixture.whenStable();
     http.expectOne('/api/chanting/cycles?page=0&size=20').flush({
       content: [{ id: 1, number: 1, startDate: '2026-09-04', status: CycleStatus.ONGOING }],
       number: 0,
@@ -152,7 +201,7 @@ describe('ChantingListComponent', () => {
 
   it('shows the cycles empty state when no cycle matches', async () => {
     component.searchModel.set({ number: '999' });
-    await new Promise((resolve) => setTimeout(resolve, 750));
+    await fixture.whenStable();
     http.expectOne('/api/chanting/cycles?page=0&size=20&number=999').flush({
       content: [],
       number: 0,

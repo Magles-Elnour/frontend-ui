@@ -19,6 +19,7 @@ import { fieldErrorKey } from '../form-validation/field-error-keys';
     TranslocoPipe,
   ],
   templateUrl: './input.component.html',
+  styleUrl: './input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'd-block' },
 })
@@ -29,6 +30,7 @@ export class InputComponent {
   type = input<'text' | 'email' | 'tel' | 'number' | 'password' | 'date'>('text');
   autocomplete = input<string>();
   prefixIcon = input<string>();
+  labelPlacement = input<'inside' | 'above'>('inside');
   hideToggle = input(false);
   floatLabel = input<'always' | 'auto'>('auto');
 
@@ -38,5 +40,13 @@ export class InputComponent {
 
   protected togglePasswordVisibility(): void {
     this.hidePassword.update((hidden) => !hidden);
+  }
+
+  protected openDatePicker(input: HTMLInputElement): void {
+    if (typeof input.showPicker === 'function') {
+      input.showPicker();
+    } else {
+      input.focus();
+    }
   }
 }

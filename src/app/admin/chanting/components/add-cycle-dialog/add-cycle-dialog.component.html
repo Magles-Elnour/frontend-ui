@@ -14,11 +14,13 @@
   <app-input
     [field]="form.number"
     label="CYCLE_NUMBER"
+    labelPlacement="above"
   ></app-input>
 
   <app-input
     [field]="form.startDate"
     label="CYCLE_START_DATE"
+    labelPlacement="above"
     type="date"
   ></app-input>
 
@@ -27,10 +29,7 @@
   </p>
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button type="button" mat-dialog-close>
-    {{ "CANCEL" | transloco }}
-  </button>
+<mat-dialog-actions>
   <button
     mat-flat-button
     type="button"
@@ -39,5 +38,8 @@
     (click)="save()"
   >
     {{ "SAVE" | transloco }}
+  </button>
+  <button mat-stroked-button type="button" mat-dialog-close>
+    {{ "CANCEL" | transloco }}
   </button>
 </mat-dialog-actions>

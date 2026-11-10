@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { form, validate } from '@angular/forms/signals';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -24,16 +24,17 @@ import { CyclesService } from '../../services/cycles.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddCycleDialogComponent {
+  private readonly data = inject<{ number: number }>(MAT_DIALOG_DATA);
   private readonly cyclesService = inject(CyclesService);
   private readonly dialogRef = inject(MatDialogRef<AddCycleDialogComponent>);
   private readonly snackbar = inject(SnackbarService);
 
-  readonly model = signal({ number: '', startDate: '' });
+  readonly model = signal({ number: String(this.data.number), startDate: '' });
   readonly form = form(this.model, (path) => {
     validate(path.number, ({ value }) => {
       const number = value();
       if (!number) return { kind: 'cycleNumberRequired' };
-      return /^[0-9]+$/.test(number) ? undefined : { kind: 'cycleDigits' };
+      return /^[0-9]+$/.test(number) ? undefined : { kind: 'cycleAddDigits' };
     });
     validate(path.startDate, ({ value }) =>
       value() ? undefined : { kind: 'cycleDateRequired' },

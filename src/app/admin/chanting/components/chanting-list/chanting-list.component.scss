@@ -2,10 +2,28 @@
   width: min(486px, 100%);
 }
 
+.cycles-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
 
 .add-cycle-button {
   height: 48px;
-  margin-left: auto;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 575px) {
+  .cycles-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .add-cycle-button {
+    align-self: flex-start;
+  }
 }
 
 table.cycles-table {
@@ -71,5 +89,14 @@ table.cycles-table {
   .mat-icon {
     margin: 0 !important;
     color: #8a8aa3;
+  }
+}
+
+.delete-btn {
+  --mdc-outlined-button-outline-color: #c62828;
+  --mdc-outlined-button-label-text-color: #c62828;
+
+  .mat-icon {
+    color: #c62828;
   }
 }
