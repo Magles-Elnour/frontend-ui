@@ -15,7 +15,7 @@
   "MEMBERS_LIST": "أعضاء المجلس",
   "MEMBERS_ATTENDANCE": "الحضور / الغياب",
   "CHANTING": "الإنشاد",
-  "CHANTING_LIST": "أعضاء المجلس",
+  "CHANTING_LIST": "الدورات",
   "CHANTING_ATTENDANCE": "الحضور / الغياب",
   "COUNCIL_PROGRAM": "برنامج المجلس",
   "REPORTS": "التقارير",
@@ -98,5 +98,18 @@
   "DELETE": "حذف",
   "CONFIRM_DELETE_TITLE": "تأكيد الحذف",
   "NO_RESULTS": "لا توجد نتائج",
-  "NO_MEMBERS_MATCH": "لا توجد نتائج مطابقة لبحثك أو الفلاتر المحددة."
+  "NO_MEMBERS_MATCH": "لا توجد نتائج مطابقة لبحثك أو الفلاتر المحددة.",
+  "NO_CYCLES_MATCH": "لا توجد نتائج مطابقة لبحثك أو الفلاتر المحددة.",
+  "CHANTING_CYCLES": "الدورات",
+  "SEARCH_CYCLE_NUMBER": "بحث برقم الدورة",
+  "ADD_CYCLE": "إضافة دورة",
+  "CYCLE_NUMBER": "رقم الدورة",
+  "CYCLE_START_DATE": "تاريخ بداية الدورة",
+  "CYCLE_VIEW": "عرض",
+  "CYCLE_EDIT": "تعديل",
+  "CYCLE_REMOVE": "إزالة",
+  "CYCLE_DIGITS_ERROR": "يرجى إدخال أرقام فقط.",
+  "CYCLE_STATUS_ONGOING": "جارية",
+  "CYCLE_STATUS_COMPLETED": "مكتملة",
+  "CYCLE_PAGINATION_ARIA": "اختيار صفحة الدورات"
 }
