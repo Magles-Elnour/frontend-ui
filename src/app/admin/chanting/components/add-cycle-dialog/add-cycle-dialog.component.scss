@@ -1,0 +1,31 @@
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+mat-dialog-content {
+  min-width: min(472px, calc(100vw - 80px));
+  padding-top: 20px;
+}
+
+.cycle-explanation {
+  margin: 8px 0 0;
+  color: #6b6b7a;
+  line-height: 1.8;
+}
+
+.save-button {
+  min-width: 96px;
+}
+
+mat-dialog-actions {
+  justify-content: flex-start;
+  gap: 8px;
+  border-top: 1px solid #ededed;
+  padding-top: 16px;
+}

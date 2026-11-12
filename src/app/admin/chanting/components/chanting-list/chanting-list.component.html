@@ -1,1 +1,108 @@
-<p>chanting-list works!</p>
+<app-page-header
+  [header]="['CHANTING', 'CHANTING_CYCLES']"
+  [links]="breadcrumbLinks"
+></app-page-header>
+<section class="section-card p-3">
+  <div class="p-1">
+    <div class="cycles-toolbar mb-3">
+      <div class="search-field position-relative">
+        <app-input
+          [field]="searchForm.number"
+          label="SEARCH_CYCLE_NUMBER"
+          labelPlacement="above"
+          placeholder="ENTER_CYCLE_NUMBER"
+        ></app-input>
+      </div>
+      <button
+        mat-flat-button
+        type="button"
+        class="add-cycle-button"
+        (click)="openAddCycleDialog()"
+      >
+        <mat-icon>add</mat-icon>
+        {{ "ADD_CYCLE" | transloco }}
+      </button>
+    </div>
+
+    <div class="position-relative">
+      <app-loading-shade [show]="loading()"></app-loading-shade>
+      <mat-paginator
+        [length]="totalCount()"
+        [pageSize]="pageSize()"
+        [pageIndex]="pageNumber()"
+        [pageSizeOptions]="[10, 20, 50]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+        [attr.aria-label]="'CYCLE_PAGINATION_ARIA' | transloco"
+        style="border-radius: 24px 24px 0 0"
+      ></mat-paginator>
+
+      <table class="cycles-table">
+        <thead>
+          <tr>
+            <th>{{ "CYCLE_NUMBER" | transloco }}</th>
+            <th>{{ "CYCLE_START_DATE" | transloco }}</th>
+            <th class="text-center">{{ "STATUS" | transloco }}</th>
+            <th class="text-center">{{ "TABLE_TOOLS" | transloco }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cycle of cycles(); track cycle.id) {
+          <tr>
+            <td>{{ "CYCLE_NUMBER_VALUE" | transloco: { number: cycle.number } }}</td>
+            <td>{{ formatDate(cycle.startDate) }}</td>
+            <td class="text-center">
+              <span
+                class="status-badge"
+                [class.completed]="cycle.status === CycleStatus.COMPLETED"
+              >
+                {{
+                  cycle.status === CycleStatus.ONGOING
+                    ? ("CYCLE_STATUS_ONGOING" | transloco)
+                    : ("CYCLE_STATUS_COMPLETED" | transloco)
+                }}
+              </span>
+            </td>
+            <td class="last-row">
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn"
+                [routerLink]="[
+                  '/',
+                  urlsNames.ADMIN,
+                  urlsNames.CHANTING,
+                  urlsNames.CHANTING_ATTENDANCE
+                ]"
+                [queryParams]="{ cycle: cycle.id }"
+                [attr.aria-label]="'CYCLE_VIEW' | transloco"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn ms-2"
+                [attr.aria-label]="'CYCLE_EDIT' | transloco"
+              >
+                <mat-icon>border_color</mat-icon>
+              </button>
+              <button
+                mat-stroked-button
+                type="button"
+                class="table-btn delete-btn ms-2"
+                [attr.aria-label]="'CYCLE_REMOVE' | transloco"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      @if (!loading() && cycles().length === 0) {
+      <app-empty-result message="NO_CYCLES_MATCH"></app-empty-result>
+      }
+    </div>
+  </div>
+</section>
