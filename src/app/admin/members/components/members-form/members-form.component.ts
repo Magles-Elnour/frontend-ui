@@ -45,8 +45,12 @@ export class MembersFormComponent {
   });
 
   readonly form = form(this.model, (path) => {
-    required(path.name);
     required(path.status);
+    validate(path.name, ({ value }) => {
+      return value().trim()
+        ? undefined
+        : { kind: 'required' };
+    });
     validate(path.phoneNumber, ({ value }) => {
       const phone = value();
 
@@ -71,18 +75,27 @@ export class MembersFormComponent {
       this.membersService
         .getById(Number(memberId))
         .pipe(finalize(() => setTimeout(() => this.loading.set(false), 300)))
-        .subscribe((member) => {
-          this.loadedMember = member;
-          this.model.set({
-            name: member.name ?? '',
-            phoneNumber: member.phoneNumber ?? '',
-            status: member.status ?? null,
-          });
+        .subscribe({
+          next: (member) => {
+            this.loadedMember = member;
+            this.model.set({
+              name: member.name ?? '',
+              phoneNumber: member.phoneNumber ?? '',
+              status: member.status ?? null,
+            });
+          },
+          error: () => {
+            this.snackbarService.error('MEMBER_LOAD_ERROR');
+          },
         });
     }
   }
 
   addOrUpdate() {
+    if (this.isEditMode && !this.loadedMember?.id) {
+      return;
+    }
+
     if (this.form().invalid()) {
       this.form().markAsTouched();
       return;
@@ -91,7 +104,7 @@ export class MembersFormComponent {
     this.loading.set(true);
     const { name, phoneNumber, status } = this.model();
     const request = {
-      name,
+      name: name.trim(),
       phoneNumber: phoneNumber || null,
       status: status as MemberStatus | null,
       startDate: this.loadedMember?.startDate,
