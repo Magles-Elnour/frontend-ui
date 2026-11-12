@@ -69,6 +69,13 @@ describe('AddCycleDialogComponent', () => {
 
     component.model.set({ number: '4a', startDate: '2026-11-09' });
     expect(component.form().invalid()).toBeTrue();
+
+    component.model.set({ number: '0', startDate: '2026-11-09' });
+    expect(component.form().invalid()).toBeTrue();
+
+    component.model.set({ number: '99999999999999999999', startDate: '2026-11-09' });
+    expect(component.form().invalid()).toBeTrue();
+
     component.save();
     fixture.detectChanges();
 
@@ -105,6 +112,21 @@ describe('AddCycleDialogComponent', () => {
 
     expect(snackbar.error).toHaveBeenCalledWith('GLOBAL_ERROR');
     expect(dialogRef.close).not.toHaveBeenCalled();
+  });
+
+  it('closes without saving from the close (×) and cancel buttons', () => {
+    component.model.set({ number: '4', startDate: '2026-11-09' });
+    fixture.detectChanges();
+
+    const closeButton = fixture.nativeElement.querySelector('.dialog-header button');
+    const cancelButton = fixture.nativeElement.querySelectorAll('mat-dialog-actions button')[1];
+
+    closeButton.click();
+    cancelButton.click();
+
+    expect(dialogRef.close).toHaveBeenCalledTimes(2);
+    expect(dialogRef.close).not.toHaveBeenCalledWith(true);
+    http.expectNone('/api/chanting/cycles');
   });
 
   it('places Save before an outlined Cancel action with the separator above actions', () => {

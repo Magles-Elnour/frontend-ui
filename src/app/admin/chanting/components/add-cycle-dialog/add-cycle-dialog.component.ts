@@ -34,7 +34,10 @@ export class AddCycleDialogComponent {
     validate(path.number, ({ value }) => {
       const number = value();
       if (!number) return { kind: 'cycleNumberRequired' };
-      return /^[0-9]+$/.test(number) ? undefined : { kind: 'cycleAddDigits' };
+      if (!/^[0-9]+$/.test(number)) return { kind: 'cycleAddDigits' };
+      return Number.isSafeInteger(Number(number)) && Number(number) > 0
+        ? undefined
+        : { kind: 'cycleAddDigits' };
     });
     validate(path.startDate, ({ value }) =>
       value() ? undefined : { kind: 'cycleDateRequired' },
