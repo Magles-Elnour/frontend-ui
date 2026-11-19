@@ -149,6 +149,72 @@ describe('ChantingListComponent', () => {
     TestBed.inject(MatDialog).closeAll();
   });
 
+  it('opens the edit dialog with cycle data and reloads after an update', async () => {
+    component.loadCycles();
+    http.expectOne('/api/chanting/cycles?page=0&size=20').flush({
+      content: [
+        {
+          id: 12,
+          number: 31,
+          startDate: '2026-09-04',
+          status: CycleStatus.ONGOING,
+        },
+      ],
+      number: 0,
+      size: 20,
+      totalElements: 1,
+      totalPages: 1,
+    });
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    fixture.nativeElement.querySelector('tbody tr .table-btn.ms-2').click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    let dialog = document.querySelector('mat-dialog-container');
+    expect(dialog?.querySelector('[mat-dialog-title]')?.textContent)
+      .toContain('CYCLE_EDIT_TITLE');
+    const numberInput = dialog?.querySelector(
+      'app-input input',
+    ) as HTMLInputElement;
+    expect(numberInput.value).toBe('31');
+    numberInput.value = '32';
+    numberInput.dispatchEvent(new Event('input'));
+    dialog?.querySelector('.save-button')?.dispatchEvent(new Event('click'));
+
+    http.expectOne({
+      method: 'PUT',
+      url: '/api/chanting/cycles/12',
+    }).flush({
+      id: 12,
+      number: 32,
+      startDate: '2026-09-04',
+      status: CycleStatus.ONGOING,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    await fixture.whenStable();
+
+    dialog = document.querySelector('mat-dialog-container');
+    expect(dialog).toBeNull();
+    http.expectOne('/api/chanting/cycles?page=0&size=20').flush({
+      content: [
+        {
+          id: 12,
+          number: 32,
+          startDate: '2026-09-04',
+          status: CycleStatus.ONGOING,
+        },
+      ],
+      number: 0,
+      size: 20,
+      totalElements: 1,
+      totalPages: 1,
+    });
+    await fixture.whenStable();
+    expect(component.cycles()[0].number).toBe(32);
+  });
+
   it('filters by cycle number immediately', async () => {
     component.searchModel.set({ number: '4' });
     await fixture.whenStable();

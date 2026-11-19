@@ -73,6 +73,30 @@ export class MockApiService {
       this.cycles.unshift(cycle);
       return this.response(req, cycle, 201);
     }
+    const cycleMatch = path.match(/^\/api\/chanting\/cycles\/(\d+)$/);
+    if (cycleMatch && req.method === 'PUT') {
+      const id = Number(cycleMatch[1]);
+      const index = this.cycles.findIndex((cycle) => cycle.id === id);
+      if (index === -1) return this.fail(req, 404, 'Cycle not found');
+
+      const body = req.body as { number?: number; startDate?: string } | null;
+      if (
+        !body ||
+        !Number.isSafeInteger(body.number) ||
+        body.number! <= 0 ||
+        typeof body.startDate !== 'string' ||
+        !body.startDate
+      ) {
+        return this.fail(req, 400, 'Invalid cycle data');
+      }
+
+      this.cycles[index] = {
+        ...this.cycles[index],
+        number: body.number!,
+        startDate: body.startDate,
+      };
+      return this.response(req, this.cycles[index]);
+    }
 
     const match = path.match(/^\/api\/members\/(\d+)$/);
     if (match) {

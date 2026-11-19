@@ -208,6 +208,31 @@ describe('mockApiInterceptor', () => {
     http.expectNone(() => true);
   });
 
+  it('updates cycles through the local mock API', () => {
+    setup();
+    let updated!: { id: number; number: number; startDate: string; status: string };
+    client.put<typeof updated>('/api/chanting/cycles/6', {
+      number: 10,
+      startDate: '2026-11-06',
+    }).subscribe((value) => updated = value);
+    jasmine.clock().tick(150);
+
+    expect(updated).toEqual({
+      id: 6,
+      number: 10,
+      startDate: '2026-11-06',
+      status: 'ONGOING',
+    });
+
+    let cycles!: { content: typeof updated[]; totalElements: number };
+    client.get<typeof cycles>('/api/chanting/cycles?page=0&size=20')
+      .subscribe((value) => cycles = value);
+    jasmine.clock().tick(150);
+    expect(cycles.content.find((cycle) => cycle.id === 6)).toEqual(updated);
+    expect(cycles.totalElements).toBe(8);
+    http.expectNone(() => true);
+  });
+
   it('recovers from invalid stored mock data', () => {
     setup();
     localStorage.setItem('mock-api-members-v1', 'invalid json');

@@ -16,7 +16,7 @@ export interface CycleResponse extends BEResponse {
   content: Cycle[];
 }
 
-export interface CreateCycleRequest {
+export interface CycleWriteRequest {
   number: number;
   startDate: string;
 }

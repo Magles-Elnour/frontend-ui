@@ -23,6 +23,7 @@ import { InputComponent } from '../../../../shared/ui-components/atoms/input/inp
 import { Cycle, CycleStatus } from '../../models/cycle';
 import { CyclesService } from '../../services/cycles.service';
 import { AddCycleDialogComponent } from '../add-cycle-dialog/add-cycle-dialog.component';
+import { CycleEditDialogComponent } from '../cycle-edit-dialog/cycle-edit-dialog.component';
 
 @Component({
   selector: 'app-chanting-list',
@@ -142,6 +143,22 @@ export class ChantingListComponent {
       .afterClosed()
       .subscribe((created) => {
         if (created) {
+          this.loadCycles();
+        }
+      });
+  }
+
+  openEditCycleDialog(cycle: Cycle): void {
+    this.dialog
+      .open(CycleEditDialogComponent, {
+        width: '520px',
+        maxWidth: 'calc(100vw - 32px)',
+        panelClass: 'add-cycle-dialog-panel',
+        data: { cycle },
+      })
+      .afterClosed()
+      .subscribe((updated) => {
+        if (updated) {
           this.loadCycles();
         }
       });
