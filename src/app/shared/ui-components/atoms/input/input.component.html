@@ -1,5 +1,10 @@
+@if (label() && labelPlacement() === 'above') {
+  <span class="input-label">
+    {{ label()! | transloco }}
+  </span>
+}
 <mat-form-field class="mb-2 col-12" [floatLabel]="floatLabel()">
-  @if (label()) {
+  @if (label() && labelPlacement() === 'inside') {
     <mat-label>{{ label()! | transloco }}</mat-label>
   }
   @if (prefixIcon()) {
@@ -7,11 +12,25 @@
   }
   <input
     matInput
+    #inputElement
+    [class.date-input]="type() === 'date'"
     [type]="type() === 'password' && hideToggle() ? (hidePassword() ? 'password' : 'text') : type()"
     [formField]="field()"
+    [attr.aria-label]="labelPlacement() === 'above' && label() ? (label()! | transloco) : null"
     [placeholder]="(placeholder() ?? '') | transloco"
     [autocomplete]="autocomplete() ?? 'off'"
   />
+  @if (type() === 'date') {
+    <button
+      mat-icon-button
+      matPrefix
+      type="button"
+      (click)="openDatePicker(inputElement)"
+      [attr.aria-label]="'OPEN_DATE_PICKER' | transloco"
+    >
+      <mat-icon>calendar_today</mat-icon>
+    </button>
+  }
   @if (hideToggle()) {
     <button
       mat-icon-button
